@@ -1,66 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Teach Buddy | English Learning Path</title>
+  <title>TeachBuddy · Learn English, your way</title>
+  <meta name="description"
+    content="Grammar notes, topic-wise practice, mixed practice, and an AI communication coach.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="css/output.css">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0a0f'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='52' fill='%233db8a0' text-anchor='middle'>TB</text></svg>">
 </head>
+
 <body class="tb-shell">
 
+  <!-- ============================ HERO ============================ -->
   <div class="tb-container">
-    <header class="tb-header">
-      <div class="relative overflow-hidden rounded-3xl border border-white/40 bg-gradient-to-r from-slate-900 via-indigo-900 to-violet-900 px-6 py-10 text-white shadow-xl sm:px-10">
-        <div class="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/10 blur-2xl"></div>
-        <div class="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-fuchsia-400/20 blur-3xl"></div>
-        <div class="relative">
-          <div class="tb-badge">TeachBuddy · English learning with AI</div>
-          <h1 class="mt-4 text-3xl font-extrabold tracking-tight sm:text-5xl">Learn English step by step</h1>
-          <p class="mt-3 max-w-2xl text-white/85">Build strong grammar foundations with guided lessons, quizzes, and an AI communication coach.</p>
-          <div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <button class="tb-btn cursor-pointer" onclick="startLearning()">🚀 Start learning</button>
-            <div class="text-sm text-white/75">Progress saves automatically in your browser.</div>
+    <section class="tb-hero tb-reveal">
+      <div class="tb-hero-orb h-72 w-72 -right-10 -top-16 bg-emerald-500/10"></div>
+      <div class="tb-hero-orb h-80 w-80 -bottom-24 -left-16 bg-sky-400/10"></div>
+
+      <div class="max-w-3xl">
+        <div class="tb-badge">English learning with an AI coach</div>
+
+        <h1 class="tb-title mt-6">
+          Learn English
+          <span class="block tb-gradient-text">at your own pace</span>
+        </h1>
+
+        <p class="tb-subtitle">
+          Read any grammar topic, practise whichever skill you want,
+          and talk to the AI coach from <strong class="font-bold text-white">any page</strong> whenever you need it.
+        </p>
+
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+          <a class="tb-btn tb-btn-lg" href="level1/notes.html">Start with notes</a>
+          <a class="tb-btn-ghost tb-btn-lg" href="level1/practice.html">Jump into practice</a>
+        </div>
+
+        <div class="mt-9 flex flex-wrap items-center gap-x-8 gap-y-4">
+          <div>
+            <div class="text-2xl font-extrabold text-white">11</div>
+            <div class="text-xs font-bold uppercase tracking-[0.14em] text-white/60">Grammar topics</div>
+          </div>
+          <div class="hidden h-8 w-px bg-white/20 sm:block"></div>
+          <div>
+            <div class="text-2xl font-extrabold text-white">3</div>
+            <div class="text-xs font-bold uppercase tracking-[0.14em] text-white/60">Mixed practice modes</div>
           </div>
         </div>
       </div>
-    </header>
+    </section>
+  </div>
 
-    <div class="grid gap-6">
-      <section class="tb-card">
-        <h2 class="tb-card-title">📘 Learning plan</h2>
-        <ol class="mt-4 list-decimal space-y-2 pl-6 text-slate-700">
-          <li>Read topic notes carefully</li>
-          <li>Attempt the quiz</li>
-          <li>Score at least <strong>70%</strong></li>
-          <li>Unlock the next topic</li>
-        </ol>
-      </section>
+  <!-- ========================= FOUR PATHS ========================= -->
+  <div class="tb-container pt-0">
+    <div class="tb-section-head tb-reveal">
+      <span class="tb-eyebrow">Get started</span>
+      <h2 class="tb-title-sm">Four places to learn</h2>
+    </div>
 
-      <section class="tb-card">
-        <h2 class="tb-card-title">🔁 Learning flow</h2>
-        <div class="mt-4 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-4 text-center text-sm font-semibold text-slate-900">
-          Notes → Quiz → Score ≥ 70% → Next Topic
+    <div class="grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+
+      <a class="tb-tile tb-card-glow tb-reveal" data-delay="0" href="level1/notes.html">
+        <div class="flex items-start justify-between gap-3">
+          <span class="tb-badge">Reading</span>
+          <span class="tb-badge-soft">Level 1</span>
         </div>
-      </section>
+        <h3 class="tb-tile-title mt-4">Notes</h3>
+        <p class="tb-tile-desc">
+          Beginner-friendly notes for all 11 grammar topics, from Noun through to Tense.
+        </p>
+        <span class="tb-tile-foot">Read the notes <span class="tb-tile-arrow">&rarr;</span></span>
+      </a>
 
-      <section class="tb-card">
-        <h2 class="tb-card-title">⚠ Important rules</h2>
-        <ul class="mt-4 list-disc space-y-2 pl-6 text-slate-700">
-          <li>You cannot skip topics</li>
-          <li>Quiz must be completed to proceed</li>
-          <li>Reattempt quiz if score is below 70%</li>
-        </ul>
-      </section>
-
-      <section class="tb-card">
-        <div class="flex flex-col gap-2">
-          <div class="text-sm font-semibold text-slate-900">Tip</div>
-          <div class="tb-muted">Aim for <span class="font-semibold text-slate-900">70%+</span> in each quiz to unlock the next topic. If you get stuck, use Level 3 to practice real conversation.</div>
+      <a class="tb-tile tb-card-glow tb-reveal" data-delay="90" href="level1/practice.html">
+        <div class="flex items-start justify-between gap-3">
+          <span class="tb-badge">Quizzes</span>
+          <span class="tb-badge-soft">Level 1</span>
         </div>
-      </section>
+        <h3 class="tb-tile-title mt-4">Topic Practice</h3>
+        <p class="tb-tile-desc">
+          One quiz per topic, with an explanation after every answer. Attempt them in any order.
+        </p>
+        <span class="tb-tile-foot">Practise a topic <span class="tb-tile-arrow">&rarr;</span></span>
+      </a>
+
+      <a class="tb-tile tb-card-glow tb-reveal" data-delay="180" href="level2/level2_dashboard.html">
+        <div class="flex items-start justify-between gap-3">
+          <span class="tb-badge">Challenges</span>
+          <span class="tb-badge-soft">Level 2</span>
+        </div>
+        <h3 class="tb-tile-title mt-4">Mixed Practice</h3>
+        <p class="tb-tile-desc">
+          Rearrange sentences, translate from Hindi, and hunt down errors with all topics mixed together.
+        </p>
+        <span class="tb-tile-foot">Mix it up <span class="tb-tile-arrow">&rarr;</span></span>
+      </a>
+
+      <a class="tb-tile tb-card-glow tb-reveal" data-delay="270" href="level3/communication.html">
+        <div class="flex items-start justify-between gap-3">
+          <span class="tb-badge">Interactive</span>
+          <span class="tb-badge-soft">Level 3</span>
+        </div>
+        <h3 class="tb-tile-title mt-4">AI Coach</h3>
+        <p class="tb-tile-desc">
+          Chat in English and get gentle corrections. Also available as a floating widget on every page.
+        </p>
+        <span class="tb-tile-foot">Start talking <span class="tb-tile-arrow">&rarr;</span></span>
+      </a>
+
     </div>
   </div>
 
-  <script src="js/main.js"></script>
+  <!-- ====================== TOPIC QUICK-PICK ====================== -->
+  <div class="tb-container pt-0">
+    <div class="tb-panel tb-reveal">
+      <div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <span class="tb-eyebrow">Jump straight in</span>
+          <h2 class="mt-2 text-2xl font-extrabold sm:text-3xl">All 11 topics, one click away</h2>
+          <p class="tb-muted mt-2">Tap a topic to open its notes. The practice quiz is one tap further.</p>
+        </div>
+        <a class="tb-btn-secondary shrink-0" href="level1/notes.html">Open the library &rarr;</a>
+      </div>
+
+      <div id="topicChips" class="mt-6 flex flex-wrap gap-2.5"></div>
+    </div>
+  </div>
+
+  <!-- ========================== COACH CTA ========================== -->
+  <div class="tb-container pt-0">
+    <section class="tb-hero tb-reveal">
+      <div class="tb-hero-orb h-64 w-64 -top-12 right-10 bg-sky-400/10"></div>
+      <div class="grid items-center gap-8 lg:grid-cols-[1.4fr_1fr]">
+        <div>
+          <div class="tb-badge">Level 3</div>
+          <h2 class="mt-5 text-3xl font-extrabold leading-tight sm:text-4xl">
+            Talk to your AI English coach<br class="hidden sm:block"> from <span class="tb-gradient-text">anywhere on the
+              site</span>
+          </h2>
+          <p class="tb-subtitle">
+            It replies naturally, corrects your grammar gently, suggests better words,
+            and keeps the conversation going.
+          </p>
+          <div class="mt-7 flex flex-col gap-3 sm:flex-row">
+            <button class="tb-btn tb-btn-lg" type="button"
+              onclick="window.TB_openCoach ? window.TB_openCoach() : (location.href='level3/communication.html')">
+              Open the chat here
+            </button>
+            <a class="tb-btn-ghost tb-btn-lg" href="level3/communication.html">Full-screen coach &rarr;</a>
+          </div>
+        </div>
+
+        <div class="rounded-[14px] border border-white/10 bg-white/5 p-4 backdrop-blur">
+          <div class="mb-3 w-fit max-w-[90%] rounded-[12px] rounded-bl-sm bg-white/8 px-4 py-2.5 text-sm" style="color: var(--tb-ink)">
+            Hi! I'm your English coach. Tell me about your day.
+          </div>
+          <div class="mb-3 ml-auto w-fit max-w-[90%] rounded-[12px] rounded-br-sm px-4 py-2.5 text-sm text-white" style="background: var(--tb-accent)">
+            I go to market yesterday.
+          </div>
+          <div class="w-fit max-w-[95%] rounded-[12px] px-4 py-2.5 text-sm font-semibold" style="border: 1px solid rgba(224, 160, 48, 0.3); background: rgba(224, 160, 48, 0.08); color: var(--tb-amber)">
+            Small improvement: "I <u>went</u> to the market yesterday." Past tense needs <em>went</em>.
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/site.js" data-root="./" data-page="home"></script>
+  <script>
+    // Quick-pick chips are generated from the shared topic list in site.js
+    (function () {
+      var wrap = document.getElementById("topicChips");
+      window.TB.topics.forEach(function (t, i) {
+        var a = document.createElement("a");
+        a.className = "tb-word tb-reveal";
+        a.setAttribute("data-delay", String(i * 45));
+        a.href = "level1/Notes/" + t.note;
+        a.textContent = t.title;
+        wrap.appendChild(a);
+      });
+      window.TB.reveal();
+    })();
+  </script>
 </body>
+
 </html>

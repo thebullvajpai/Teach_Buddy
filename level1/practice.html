@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Topic Practice · TeachBuddy</title>
+  <meta name="description" content="Topic-wise English grammar practice quizzes. Attempt them in any order.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="../css/output.css">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0a0f'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='52' fill='%233db8a0' text-anchor='middle'>TB</text></svg>">
+</head>
+
+<body class="tb-shell">
+
+  <div class="tb-container">
+
+    <!-- ============================ HEAD ============================ -->
+    <header class="tb-panel tb-reveal">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="tb-badge">Topic Practice</span>
+            <span class="tb-badge-soft">Level 1</span>
+          </div>
+          <h1 class="tb-title-sm mt-5">Practise <span class="tb-gradient-text">one topic at a time</span></h1>
+          <p class="tb-muted mt-3 max-w-xl">
+            Pick any topic below. Every question explains itself the moment you answer,
+            and you can retake a quiz as many times as you like.
+          </p>
+        </div>
+
+        <div class="grid shrink-0 grid-cols-3 gap-3 lg:w-80">
+          <div class="tb-stat">
+            <div class="tb-stat-num tb-gradient-text">11</div>
+            <div class="tb-stat-label">Quizzes</div>
+          </div>
+          <div class="tb-stat">
+            <div class="tb-stat-num tb-gradient-text" id="attemptedCount">0</div>
+            <div class="tb-stat-label">Attempted</div>
+          </div>
+          <div class="tb-stat">
+            <div class="tb-stat-num tb-gradient-text" id="bestAvg">0%</div>
+            <div class="tb-stat-label">Best avg</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div class="relative flex-1">
+          <input id="search" class="tb-input" type="search" placeholder="Search a topic to practise…"
+            autocomplete="off">
+        </div>
+        <button class="tb-btn shrink-0" type="button" id="randomBtn">Random Quiz</button>
+        <a class="tb-btn-secondary shrink-0" href="notes.html">Back to notes</a>
+      </div>
+    </header>
+
+    <!-- =========================== GRID ============================ -->
+    <div id="practiceGrid" class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+    <p id="empty" class="tb-muted mt-10 hidden text-center">No topic matches that search.</p>
+
+    <!-- ========================== NEXT UP =========================== -->
+    <section class="tb-panel tb-reveal mt-10">
+      <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+        <div>
+          <span class="tb-eyebrow">Ready for a challenge?</span>
+          <h2 class="mt-2 text-2xl font-extrabold">Mixed practice blends every topic</h2>
+          <p class="tb-muted mt-2 max-w-xl">
+            Rearranging, translating, and error-spotting test your grammar without topic labels.
+          </p>
+        </div>
+        <div class="flex shrink-0 flex-col gap-3 sm:flex-row">
+          <a class="tb-btn" href="../level2/level2_dashboard.html">Mixed practice</a>
+          <a class="tb-btn-secondary" href="../level3/communication.html">AI coach</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="../js/site.js" data-root="../" data-page="practice"></script>
+  <script>
+    (function () {
+      var grid = document.getElementById("practiceGrid");
+      var empty = document.getElementById("empty");
+      var search = document.getElementById("search");
+      var topics = window.TB.topics;
+
+      var bests = [];
+      var countLabels = {};
+
+      topics.forEach(function (t, i) {
+        var best = parseInt(window.TB.store("tb_best_" + t.id, ""), 10);
+        var hasBest = !isNaN(best);
+        if (hasBest) bests.push(best);
+
+        var card = document.createElement("article");
+        card.className = "tb-tile tb-card-glow tb-reveal";
+        card.setAttribute("data-delay", String((i % 3) * 80));
+        card.setAttribute("data-title", t.title.toLowerCase() + " " + t.id);
+
+        card.innerHTML =
+          '<div class="flex items-start justify-between gap-3">' +
+            '<span class="tb-badge">' + t.title + '</span>' +
+            (hasBest
+              ? '<span class="tb-chip">Best ' + best + '%</span>'
+              : '<span class="tb-badge-soft">Ready</span>') +
+          '</div>' +
+          '<h3 class="tb-tile-title mt-4">' + t.title + '</h3>' +
+          '<p class="tb-tile-desc">' + t.blurb + '</p>' +
+          '<div class="mt-4">' +
+            '<div class="tb-progress"><span style="width:' + (hasBest ? best : 0) + '%"></span></div>' +
+            '<div class="mt-1.5 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.12em] text-violet-400">' +
+              '<span data-count>… questions</span>' +
+              '<span>' + (hasBest ? "Your best" : "Not attempted yet") + '</span>' +
+            '</div>' +
+          '</div>' +
+          '<div class="mt-auto flex flex-wrap gap-2 pt-5">' +
+            '<a class="tb-btn flex-1 px-4 py-2.5" href="all_quiz.html?topic=' + encodeURIComponent(t.id) + '">Start practice</a>' +
+            '<a class="tb-btn-soft" href="Notes/' + t.note + '" title="Read the ' + t.title + ' notes">Notes</a>' +
+          '</div>';
+
+        grid.appendChild(card);
+        countLabels[t.id] = card.querySelector("[data-count]");
+      });
+
+      function setCount(id, n) {
+        var label = countLabels[id];
+        if (!label) return;
+        label.textContent = typeof n === "number"
+          ? n + " question" + (n === 1 ? "" : "s")
+          : "Quiz ready";
+      }
+
+      /* One cached request for every count, instead of 11 quiz files.
+         If the manifest is missing or stale, fall back to reading the files. */
+      fetch("../content-manifest.json")
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (manifest) {
+          var counts = manifest && manifest.topics;
+          var complete = counts && topics.every(function (t) {
+            return typeof counts[t.id] === "number";
+          });
+
+          if (complete) {
+            topics.forEach(function (t) { setCount(t.id, counts[t.id]); });
+            return;
+          }
+          throw new Error("manifest unusable");
+        })
+        .catch(function () {
+          topics.forEach(function (t) {
+            fetch("quiz/" + t.id + ".json")
+              .then(function (r) { return r.ok ? r.json() : null; })
+              .then(function (data) {
+                setCount(t.id, data && data.questions ? data.questions.length : null);
+              })
+              .catch(function () { setCount(t.id, null); });
+          });
+        });
+
+      document.getElementById("attemptedCount").textContent = String(bests.length);
+      if (bests.length) {
+        var avg = Math.round(bests.reduce(function (a, b) { return a + b; }, 0) / bests.length);
+        document.getElementById("bestAvg").textContent = avg + "%";
+      }
+
+      window.TB.reveal();
+
+      search.addEventListener("input", function () {
+        var q = search.value.trim().toLowerCase();
+        var shown = 0;
+
+        grid.querySelectorAll("[data-title]").forEach(function (card) {
+          var match = !q || card.getAttribute("data-title").indexOf(q) !== -1;
+          card.style.display = match ? "" : "none";
+          if (match) shown++;
+        });
+
+        empty.classList.toggle("hidden", shown !== 0);
+      });
+
+      document.getElementById("randomBtn").addEventListener("click", function () {
+        var pick = topics[Math.floor(Math.random() * topics.length)];
+        window.location.href = "all_quiz.html?topic=" + encodeURIComponent(pick.id);
+      });
+    })();
+  </script>
+</body>
+
+</html>

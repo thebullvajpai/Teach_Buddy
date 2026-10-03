@@ -1,37 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Level 2 - Practice Zone</title>
+  <title>Mixed Practice · TeachBuddy</title>
+  <meta name="description"
+    content="Mixed-topic English practice: rearrange sentences, translate from Hindi, and correct errors.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="../css/output.css">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0a0f'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='52' fill='%233db8a0' text-anchor='middle'>TB</text></svg>">
 </head>
-<body class="tb-shell tb-level2">
+
+<body class="tb-shell">
 
   <div class="tb-container">
-    <header class="tb-header">
-      <div class="relative overflow-hidden rounded-3xl border border-white/40 bg-white/80 px-6 py-8 shadow-xl backdrop-blur sm:px-10">
-        <div class="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-emerald-500/10 blur-3xl"></div>
-        <div class="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl"></div>
-        <div class="relative flex items-start justify-between gap-4">
-          <div>
-            <div class="tb-badge">Level 2 · Practice</div>
-            <h1 class="mt-4 text-3xl font-extrabold tracking-tight sm:text-5xl">Practice zone</h1>
-            <p class="mt-3 text-slate-700">Strengthen your sentence skills with short activities.</p>
+
+    <!-- ============================ HEAD ============================ -->
+    <header class="tb-panel tb-reveal">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="tb-badge">Mixed Practice</span>
+            <span class="tb-badge-soft">Level 2</span>
           </div>
-          <button class="tb-btn-secondary cursor-pointer" onclick="window.location.href='../level1/learning.html'">← Level 1</button>
+          <h1 class="tb-title-sm mt-5">All topics, <span class="tb-gradient-text">mixed together</span></h1>
+          <p class="tb-muted mt-3 max-w-xl">
+            These exercises do not specify which grammar rule they test. Spotting the structure directly helps build fluency.
+          </p>
+        </div>
+
+        <div class="grid shrink-0 grid-cols-2 gap-3 lg:w-56">
+          <div class="tb-stat">
+            <div class="tb-stat-num tb-gradient-text">3</div>
+            <div class="tb-stat-label">Modes</div>
+          </div>
+          <div class="tb-stat">
+            <div class="tb-stat-num tb-gradient-text" id="totalQ">0</div>
+            <div class="tb-stat-label">Exercises</div>
+          </div>
         </div>
       </div>
     </header>
 
-    <div id="practiceContainer" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"></div>
+    <!-- ========================= ACTIVITIES ========================= -->
+    <div class="mt-8 grid gap-5 md:grid-cols-3">
 
-    <div class="mt-8 flex justify-end">
-      <button class="tb-btn cursor-pointer" onclick="window.location.href='../level3/communication.html'">Move to level 3 →</button>
+      <a class="tb-tile tb-card-glow tb-reveal" data-delay="0" href="sentence_rearrange.html">
+        <div class="flex items-start justify-between gap-3">
+          <span class="tb-badge">Rearrange</span>
+          <span class="tb-badge-soft" data-count="rearrange">…</span>
+        </div>
+        <h3 class="tb-tile-title mt-4">Rearrange Sentences</h3>
+        <p class="tb-tile-desc">
+          Words arrive scrambled. Tap them in the right order to build a correct English sentence.
+        </p>
+        <ul class="mt-4 space-y-1.5 text-xs font-semibold text-violet-500">
+          <li>• Trains word order &amp; sentence structure</li>
+          <li>• Instant check, undo any word</li>
+        </ul>
+        <span class="tb-tile-foot">Start practice <span class="tb-tile-arrow">→</span></span>
+      </a>
+
+      <a class="tb-tile tb-card-glow tb-reveal" data-delay="90" href="sentence_translation.html">
+        <div class="flex items-start justify-between gap-3">
+          <span class="tb-badge">Translate</span>
+          <span class="tb-badge-soft" data-count="translate">…</span>
+        </div>
+        <h3 class="tb-tile-title mt-4">Translate Sentences</h3>
+        <p class="tb-tile-desc">
+          Read a sentence in Hindi and write it in natural English. The model answer is always shown.
+        </p>
+        <ul class="mt-4 space-y-1.5 text-xs font-semibold text-violet-500">
+          <li>• Builds active vocabulary</li>
+          <li>• Reveal a hint whenever you're stuck</li>
+        </ul>
+        <span class="tb-tile-foot">Start practice <span class="tb-tile-arrow">→</span></span>
+      </a>
+
+      <a class="tb-tile tb-card-glow tb-reveal" data-delay="180" href="error_correction.html">
+        <div class="flex items-start justify-between gap-3">
+          <span class="tb-badge">Correction</span>
+          <span class="tb-badge-soft" data-count="errors">…</span>
+        </div>
+        <h3 class="tb-tile-title mt-4">Error Correction</h3>
+        <p class="tb-tile-desc">
+          Each sentence hides one mistake. Find it, rewrite the sentence, and see exactly what changed.
+        </p>
+        <ul class="mt-4 space-y-1.5 text-xs font-semibold text-violet-500">
+          <li>• Sharpens proofreading instinct</li>
+          <li>• Highlights the exact word that changed</li>
+        </ul>
+        <span class="tb-tile-foot">Start practice <span class="tb-tile-arrow">→</span></span>
+      </a>
+
     </div>
+
+    <!-- ========================== SIDE NOTE ========================== -->
+    <section class="tb-panel tb-reveal mt-10">
+      <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+        <div>
+          <span class="tb-eyebrow">Somewhere else to go</span>
+          <h2 class="mt-2 text-2xl font-extrabold">Need the rule behind a mistake?</h2>
+          <p class="tb-muted mt-2 max-w-xl">
+            Review reference notes for targeted topics, or practice conversational English with the AI coach.
+          </p>
+        </div>
+        <div class="flex shrink-0 flex-col gap-3 sm:flex-row">
+          <a class="tb-btn-secondary" href="../level1/notes.html">Notes</a>
+          <a class="tb-btn-secondary" href="../level1/practice.html">Topic practice</a>
+          <a class="tb-btn" href="../level3/communication.html">AI coach</a>
+        </div>
+      </div>
+    </section>
+
   </div>
 
-  <script src="level2.js"></script>
+  <script src="../js/site.js" data-root="../" data-page="mixed"></script>
+  <script>
+    (function () {
+      var files = [
+        { key: "rearrange", manifest: "rearrange", url: "data/rearrange.json" },
+        { key: "translate", manifest: "sentence_translation", url: "data/sentence_translation.json" },
+        { key: "errors", manifest: "error_correction", url: "data/error_correction.json" }
+      ];
 
+      function paint(counts) {
+        var total = 0;
+        files.forEach(function (f) {
+          var n = counts[f.key];
+          var badge = document.querySelector('[data-count="' + f.key + '"]');
+          if (badge) badge.textContent = n ? n + " exercises" : "Ready";
+          total += n || 0;
+        });
+        if (total) document.getElementById("totalQ").textContent = String(total);
+      }
+
+      /* One cached request shared with the topic-practice page. Falls back to
+         reading the three data files if the manifest is missing or stale. */
+      fetch("../content-manifest.json")
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (manifest) {
+          var mixed = manifest && manifest.mixed;
+          var complete = mixed && files.every(function (f) {
+            return typeof mixed[f.manifest] === "number";
+          });
+          if (!complete) throw new Error("manifest unusable");
+
+          var counts = {};
+          files.forEach(function (f) { counts[f.key] = mixed[f.manifest]; });
+          paint(counts);
+        })
+        .catch(function () {
+          var counts = {};
+          Promise.all(files.map(function (f) {
+            return fetch(f.url)
+              .then(function (r) { return r.ok ? r.json() : null; })
+              .then(function (d) { counts[f.key] = d && d.questions ? d.questions.length : 0; })
+              .catch(function () { counts[f.key] = 0; });
+          })).then(function () { paint(counts); });
+        });
+    })();
+  </script>
 </body>
+
 </html>

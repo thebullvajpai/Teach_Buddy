@@ -1,125 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Level 3 - Communication Practice</title>
-    <link rel="stylesheet" href="../css/output.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Coach · TeachBuddy</title>
+  <meta name="description"
+    content="Practise real English conversation with an AI coach that replies naturally and corrects you gently.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="../css/output.css">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0a0f'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='52' fill='%233db8a0' text-anchor='middle'>TB</text></svg>">
 </head>
 
 <body class="tb-shell tb-chat">
 
-    <div class="tb-container py-4">
-        <div class="mx-auto max-w-4xl">
-            <header class="tb-header">
-                <div class="relative overflow-hidden rounded-3xl border border-white/40 bg-gradient-to-r from-slate-900 via-indigo-900 to-violet-900 px-6 py-8 text-white shadow-xl sm:px-10">
-                    <div class="absolute -right-16 -top-16 h-56 w-56 rounded-full bg-white/10 blur-2xl"></div>
-                    <div class="absolute -bottom-24 -left-24 h-72 w-72 rounded-full bg-fuchsia-400/20 blur-3xl"></div>
-                    <div class="relative flex items-start justify-between gap-4">
-                        <div>
-                            <div class="tb-badge">Level 3 · AI coach</div>
-                            <h1 class="mt-4 text-3xl font-extrabold tracking-tight sm:text-5xl">Communication practice</h1>
-                            <p class="mt-3 max-w-2xl text-white/85">Chat with the AI and get corrections to improve your English.</p>
-                        </div>
-                        <button class="tb-btn-secondary" onclick="window.location.href='../level2/level2_dashboard.html'">← Level 2</button>
-                    </div>
-                </div>
-            </header>
+  <div class="tb-container">
 
-            <div class="tb-card flex h-[67vh]  md:h-[65vh] flex-col overflow-hidden p-0">
-                <div class="flex items-center justify-between gap-3 border-b border-slate-200 bg-white px-5 py-4">
-                    <div class="text-sm font-semibold text-slate-900">AI Communication Coach</div>
-                    <div id="coinDisplay" class="tb-badge">Coins: 0</div>
-                </div>
+    <!-- ============================ HEAD ============================ -->
+    <header class="tb-reveal mb-6 flex flex-wrap items-center justify-between gap-3">
+      <div class="flex flex-wrap items-center gap-2">
+        <span class="tb-badge">AI Coach</span>
+        <span class="tb-badge-soft">Level 3</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <a class="tb-btn-soft" href="../level1/notes.html">Notes</a>
+      </div>
+    </header>
 
-                <div id="chatBox" class="flex-1 overflow-y-auto px-5 py-4"></div>
+    <div class="grid gap-6 lg:grid-cols-[1fr_20rem]">
 
-                <div class="flex items-center gap-3 border-t border-slate-200 bg-white px-5 py-4">
-                    <input class="tb-input py-4" type="text" id="userInput" placeholder="Type your message..." />
-                    <button class="tb-btn shrink-0" onclick="sendMessage()">Send</button>
-                </div>
+      <!-- =========================== CHAT =========================== -->
+      <section class="tb-panel tb-reveal flex flex-col overflow-hidden p-0"
+        style="height: min(72vh, 44rem)">
+
+        <div class="flex shrink-0 items-center justify-between border-b border-[var(--tb-border)] bg-[var(--tb-surface-2)] px-5 py-4">
+          <div class="min-w-0 flex-1">
+            <div class="text-sm font-extrabold leading-tight text-[color:var(--tb-ink)]">AI Communication Coach</div>
+            <div class="flex items-center gap-1.5 text-[11px] font-semibold text-emerald-400">
+              <span class="inline-block h-2 w-2 rounded-full bg-emerald-400"></span> Active
             </div>
+          </div>
+          <button class="tb-btn-soft text-xs" type="button" id="clearChat" title="Start a fresh conversation">Clear</button>
         </div>
+
+        <div id="chatBox" class="flex-1 overflow-y-auto bg-[var(--tb-surface-alt)] px-5 py-5"></div>
+
+        <div class="tb-starter-row" id="starters"></div>
+
+        <div class="flex shrink-0 items-center gap-2.5 border-t border-[var(--tb-border)] bg-[var(--tb-surface-2)] px-4 py-3.5">
+          <input class="tb-input" type="text" id="userInput" placeholder="Say something in English…"
+            autocomplete="off">
+          <button class="tb-btn shrink-0" type="button" id="sendBtn">Send</button>
+        </div>
+
+      </section>
+
+      <!-- =========================== ASIDE ========================== -->
+      <aside class="flex flex-col gap-5">
+
+        <div class="tb-card tb-reveal">
+          <span class="tb-badge">Guidelines</span>
+          <h2 class="tb-card-title mt-4">Effective Practice</h2>
+          <ul class="mt-3 space-y-2.5 text-sm text-[color:var(--tb-ink-soft)]">
+            <li class="flex gap-2"><span>1.</span><span>Write full sentences, even if you are unsure.</span></li>
+            <li class="flex gap-2"><span>2.</span><span>Mistakes are part of the process. The coach corrects them directly.</span></li>
+            <li class="flex gap-2"><span>3.</span><span>Respond to follow-up questions to keep the dialogue moving.</span></li>
+            <li class="flex gap-2"><span>4.</span><span>Ask for explanations whenever you want deeper context.</span></li>
+          </ul>
+        </div>
+
+        <div class="tb-card tb-reveal" data-delay="90">
+          <span class="tb-badge">Navigation</span>
+          <h2 class="tb-card-title mt-4">Continue learning</h2>
+          <div class="mt-4 flex flex-col gap-2.5">
+            <a class="tb-btn-soft justify-start" href="../level1/notes.html">Grammar notes</a>
+            <a class="tb-btn-soft justify-start" href="../level1/practice.html">Topic practice</a>
+            <a class="tb-btn-soft justify-start" href="../level2/level2_dashboard.html">Mixed practice</a>
+          </div>
+        </div>
+
+      </aside>
+
     </div>
 
-<script>
-let coins = parseInt(localStorage.getItem("coins") || "0");
-document.getElementById("coinDisplay").innerText = "Coins: " + coins;
+  </div>
 
-async function sendMessage() {
+  <script src="../js/site.js" data-root="../" data-page="coach"></script>
+  <script>
+    (function () {
+      var box = document.getElementById("chatBox");
 
-    const input = document.getElementById("userInput");
-    const message = input.value.trim();
+      var chat = window.TB.createChat({
+        box: box,
+        input: document.getElementById("userInput"),
+        sendBtn: document.getElementById("sendBtn")
+      });
 
-    if (!message) return;
+      function greet() {
+        chat.addMessage(
+          "Hello. I am your English communication coach.\n\nShare anything you would like to discuss: your routine, what you are studying, or a sentence you want to check. I will reply and provide corrections when needed.",
+          "ai"
+        );
+      }
 
-    addMessage(message, "user");
+      greet();
 
-    input.value = "";
+      var starters = document.getElementById("starters");
+      window.TB.starters.forEach(function (s) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.className = "tb-suggest";
+        b.textContent = s;
+        b.addEventListener("click", function () { chat.send(s); });
+        starters.appendChild(b);
+      });
 
-    try {
-        const response = await fetch("https://teachbuddy.onrender.com/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ message })
-        });
+      document.getElementById("clearChat").addEventListener("click", function () {
+        box.innerHTML = "";
+        greet();
+        document.getElementById("userInput").focus();
+      });
 
-        const data = await response.json();
-
-        processAIResponse(data.reply);
-
-        // reward coins
-        coins += 5;
-        localStorage.setItem("coins", coins);
-        document.getElementById("coinDisplay").innerText = "Coins: " + coins;
-
-    } catch (error) {
-        addMessage("Server error. Please check backend.", "ai");
-        console.error(error);
-    }
-}
-
-function processAIResponse(fullText) {
-
-    // Split reply and correction
-    let reply = fullText;
-    let correction = "";
-
-    if (fullText.includes("Correction:")) {
-        const parts = fullText.split("Correction:");
-        reply = parts[0].trim();
-        correction = parts[1].trim();
-    }
-
-    addMessage(reply, "ai");
-
-    if (correction) {
-        addMessage("Correction: " + correction, "correction");
-    }
-}
-
-function addMessage(text, type) {
-
-    const chatBox = document.getElementById("chatBox");
-
-    const div = document.createElement("div");
-    div.classList.add("message", type);
-    div.innerText = text;
-
-    chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
-}
-
-// Enter key support
-document.getElementById("userInput")
-.addEventListener("keydown", function(e) {
-    if (e.key === "Enter") {
-        sendMessage();
-    }
-});
-</script>
-
+      document.getElementById("userInput").focus();
+    })();
+  </script>
 </body>
+
 </html>

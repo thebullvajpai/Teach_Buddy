@@ -4,187 +4,302 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Grammar Quiz</title>
+  <title>Topic Quiz · TeachBuddy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="../css/output.css">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0a0f'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='52' fill='%233db8a0' text-anchor='middle'>TB</text></svg>">
 </head>
 
-<body class="tb-shell tb-quiz">
+<body class="tb-shell">
 
-  <div class="tb-container">
-    <div class="mx-auto max-w-lg">
-      <header class="tb-header">
-        <div class="relative overflow-hidden rounded-3xl border border-white/40 bg-white/80 px-6 py-8 shadow-xl backdrop-blur sm:px-10">
-          <div class="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl"></div>
-          <div class="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-amber-500/10 blur-3xl"></div>
-          <div class="relative flex items-start justify-between gap-4">
-            <div>
-              <div class="tb-badge">Level 1 · Quiz</div>
-              <h1 class="mt-4 text-3xl font-extrabold tracking-tight sm:text-5xl">Grammar quiz</h1>
-              <p class="mt-3 text-slate-700">Pick the correct option. Explanations appear after you answer.</p>
-            </div>
-            <button class="tb-btn-secondary" onclick="location.href='learning.html'">← Back</button>
-          </div>
-        </div>
-      </header>
+  <div class="tb-container-narrow">
 
-      <div class="tb-card" id="quizBox">
-        <h2 class="text-lg font-semibold" id="question">Loading...</h2>
-        <div class="mt-4" id="options"></div>
-        <div class="mt-4 text-sm text-slate-700" id="explanation"></div>
-        <button class="tb-btn mt-5 w-full" id="nextBtn" disabled>Next question</button>
+    <!-- ============================ HEAD ============================ -->
+    <header class="tb-reveal mb-6 flex flex-wrap items-center justify-between gap-3">
+      <a class="tb-back" href="practice.html">← All topics</a>
+      <div class="flex items-center gap-2">
+        <span class="tb-chip" id="topicChip">Level 1 · Practice</span>
+        <a class="tb-btn-soft" id="notesLink" href="notes.html">Notes</a>
       </div>
-    </div>
+    </header>
+
+    <!-- =========================== QUIZ ============================ -->
+    <section class="tb-panel tb-reveal" id="quizPanel">
+
+      <!-- progress -->
+      <div id="progressWrap">
+        <div class="flex items-center justify-between gap-3 text-xs font-bold uppercase tracking-[0.14em] text-violet-500">
+          <span id="qCounter">Question 1</span>
+          <span id="scoreCounter">Score 0</span>
+        </div>
+        <div class="tb-progress mt-2"><span id="progressBar" style="width:0%"></span></div>
+      </div>
+
+      <!-- question -->
+      <div id="quizBody" class="mt-7">
+        <div class="tb-shimmer h-6 w-3/4 rounded-lg"></div>
+        <div class="mt-5 space-y-3">
+          <div class="tb-shimmer h-14 rounded-2xl"></div>
+          <div class="tb-shimmer h-14 rounded-2xl"></div>
+          <div class="tb-shimmer h-14 rounded-2xl"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <p class="tb-muted mt-5 text-center">
+      Tip: press <kbd class="rounded-md border border-violet-200 bg-white px-1.5 py-0.5 text-xs font-bold">1</kbd>–<kbd
+        class="rounded-md border border-violet-200 bg-white px-1.5 py-0.5 text-xs font-bold">4</kbd> to answer and
+      <kbd class="rounded-md border border-violet-200 bg-white px-1.5 py-0.5 text-xs font-bold">Enter</kbd> for the next
+      question.
+    </p>
+
   </div>
 
+  <script src="../js/site.js" data-root="../" data-page="practice"></script>
   <script>
-    let questions = [];
-    let usedIndexes = [];
-    let currentQuestion = null;
+    (function () {
+      var LETTERS = ["A", "B", "C", "D", "E", "F"];
 
-    let score = 0;
-    let totalAttempted = 0;
+      var panel = document.getElementById("quizPanel");
+      var body = document.getElementById("quizBody");
+      var progressWrap = document.getElementById("progressWrap");
+      var progressBar = document.getElementById("progressBar");
+      var qCounter = document.getElementById("qCounter");
+      var scoreCounter = document.getElementById("scoreCounter");
 
-    const PASS_PERCENTAGE = 70;
+      var topicId = (new URLSearchParams(window.location.search).get("topic") || "").trim();
+      var meta = window.TB.topics.filter(function (t) { return t.id === topicId; })[0];
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const topicRaw = urlParams.get("topic");
+      /* ---------------------------------------------------------- *
+       * No topic in the URL → offer the whole list instead of an alert
+       * ---------------------------------------------------------- */
+      if (!meta) {
+        progressWrap.style.display = "none";
+        body.innerHTML =
+          '<h1 class="text-2xl font-extrabold">Pick a topic to practise</h1>' +
+          '<p class="tb-muted mt-2">Select any topic to begin.</p>' +
+          '<div class="mt-6 flex flex-wrap gap-2.5" id="pick"></div>';
 
-    if (!topicRaw) {
-      alert("No quiz topic selected!");
-      // Prevent errors below and send user back.
-      window.location.href = "learning.html";
-      throw new Error("Missing topic parameter");
-    }
-
-    const topic = topicRaw.trim();
-
-    // Must match the order used on learning page (learning.js)
-    const TOPIC_ORDER = [
-      "noun",
-      "pronoun",
-      "verb",
-      "adjective",
-      "adverb",
-      "preposition",
-      "article",
-      "conjuction",
-      "interjection",
-      "sentence_formation",
-      "tense",
-    ];
-
-    const quizFile = `quiz/${topic}.json`;
-
-    fetch(quizFile)
-      .then(res => res.json())
-      .then(data => {
-        questions = data.questions;
-        loadQuestion();
-      })
-      .catch((e) => {
-        console.error(e)
-        document.getElementById("question").innerText = "❌ Quiz not found!";
-      });
-
-    function loadQuestion() {
-      document.getElementById("explanation").innerText = "";
-      document.getElementById("nextBtn").disabled = true;
-
-      if (usedIndexes.length === questions.length) {
-        const scorePercentage = totalAttempted ? Math.round((score / totalAttempted) * 100) : 0;
-        quizFinished(scorePercentage, topic);
+        var pick = document.getElementById("pick");
+        window.TB.topics.forEach(function (t) {
+          var a = document.createElement("a");
+          a.className = "tb-word";
+          a.href = "all_quiz.html?topic=" + encodeURIComponent(t.id);
+          a.textContent = t.title;
+          pick.appendChild(a);
+        });
         return;
       }
 
-      let index;
-      do {
-        index = Math.floor(Math.random() * questions.length);
-      } while (usedIndexes.includes(index));
+      document.title = meta.title + " Quiz · TeachBuddy";
+      document.getElementById("topicChip").textContent = meta.title + " · Level 1";
+      document.getElementById("notesLink").href = "Notes/" + meta.note;
 
-      usedIndexes.push(index);
-      currentQuestion = questions[index];
+      /* ---------------------------------------------------------- *
+       * State
+       * ---------------------------------------------------------- */
+      var questions = [];
+      var order = [];
+      var step = 0;
+      var score = 0;
+      var answered = false;
+      var current = null;
 
-      document.getElementById("question").innerText =
-        currentQuestion.question;
-
-      const optionsDiv = document.getElementById("options");
-      optionsDiv.innerHTML = "";
-
-      currentQuestion.options.forEach((opt, i) => {
-        const div = document.createElement("div");
-        div.className = "option";
-        div.innerText = opt;
-        div.onclick = () => checkAnswer(div, i);
-        optionsDiv.appendChild(div);
-      });
-    }
-
-    function checkAnswer(selectedDiv, selectedIndex) {
-      const options = document.querySelectorAll(".option");
-
-      options.forEach((opt, i) => {
-        opt.onclick = null;
-        if (i === currentQuestion.answer) opt.classList.add("correct");
-      });
-
-      if (selectedIndex === currentQuestion.answer) {
-        score++;
-      } else {
-        selectedDiv.classList.add("wrong");
+      function shuffle(n) {
+        var a = [];
+        for (var i = 0; i < n; i++) a.push(i);
+        for (var j = a.length - 1; j > 0; j--) {
+          var k = Math.floor(Math.random() * (j + 1));
+          var tmp = a[j]; a[j] = a[k]; a[k] = tmp;
+        }
+        return a;
       }
 
-      totalAttempted++;
+      fetch("quiz/" + topicId + ".json")
+        .then(function (res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
+        .then(function (data) {
+          questions = data.questions || [];
+          if (!questions.length) throw new Error("empty quiz");
+          order = shuffle(questions.length);
+          render();
+        })
+        .catch(function (e) {
+          console.error(e);
+          progressWrap.style.display = "none";
+          body.innerHTML =
+            '<h1 class="text-2xl font-extrabold">Quiz not available</h1>' +
+            '<p class="tb-muted mt-2">We couldn\'t load the questions for this topic. You can still read the notes or try another topic.</p>' +
+            '<div class="mt-6 flex flex-wrap gap-3">' +
+            '<a class="tb-btn" href="Notes/' + meta.note + '">📖 Read the notes</a>' +
+            '<a class="tb-btn-secondary" href="practice.html">← All topics</a>' +
+            "</div>";
+        });
 
-      document.getElementById("explanation").innerText =
-        "Explanation: " + currentQuestion.explanation;
+      /* ---------------------------------------------------------- *
+       * Render a question
+       * ---------------------------------------------------------- */
+      function render() {
+        if (step >= order.length) return finish();
 
-      document.getElementById("nextBtn").disabled = false;
-    }
+        answered = false;
+        current = questions[order[step]];
 
-    document.getElementById("nextBtn").onclick = loadQuestion;
+        qCounter.textContent = "Question " + (step + 1) + " of " + order.length;
+        scoreCounter.textContent = "Score " + score + " / " + step;
+        progressBar.style.width = (step / order.length) * 100 + "%";
 
-    function quizFinished(scorePercentage, topic) {
-      const quizBox = document.getElementById("quizBox");
+        var html =
+          '<h1 class="text-xl font-extrabold leading-snug sm:text-2xl">' + esc(current.question) + "</h1>" +
+          '<div class="mt-5 space-y-3" id="options"></div>' +
+          '<div id="explain"></div>' +
+          '<button class="tb-btn mt-6 w-full" id="nextBtn" type="button" disabled>Choose an answer</button>';
 
-    quizBox.innerHTML = `
-      <div class="text-center">
-        <div class="tb-badge mx-auto">Result</div>
-        <h2 class="mt-3 text-2xl font-bold">🎉 Quiz completed!</h2>
-        <p class="mt-2 text-slate-700">Your score: <strong>${scorePercentage}%</strong></p>
-      </div>
-    `;
+        body.innerHTML = html;
+        body.classList.remove("tb-pop");
+        void body.offsetWidth;
+        body.classList.add("tb-pop");
 
-      if (scorePercentage >= PASS_PERCENTAGE) {
-        localStorage.setItem("level1_completed", "true");
-        localStorage.setItem(`progress_${topic}`, "completed");
+        var options = document.getElementById("options");
+        current.options.forEach(function (opt, i) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.className = "tb-option";
+          b.innerHTML =
+            '<span class="tb-option-key">' + (LETTERS[i] || i + 1) + "</span><span>" + esc(opt) + "</span>";
+          b.addEventListener("click", function () { choose(b, i); });
+          options.appendChild(b);
+        });
 
-        // Unlock the next topic (and keep the unlock state monotonic).
-        const currentIndex = TOPIC_ORDER.indexOf(topic);
-        if (currentIndex !== -1) {
-          const storedUnlocked = parseInt(localStorage.getItem("unlockedIndex") || "0", 10);
-          const safeStored = Number.isNaN(storedUnlocked) ? 0 : storedUnlocked;
-          const nextUnlocked = Math.max(safeStored, currentIndex + 1);
-          localStorage.setItem("unlockedIndex", String(nextUnlocked));
+        document.getElementById("nextBtn").addEventListener("click", next);
+      }
+
+      function choose(button, index) {
+        if (answered) return;
+        answered = true;
+
+        var all = document.querySelectorAll(".tb-option");
+        all.forEach(function (node, i) {
+          node.classList.add("is-locked");
+          if (i === current.answer) node.classList.add("is-correct");
+        });
+
+        if (index === current.answer) {
+          score++;
+        } else {
+          button.classList.add("is-wrong");
         }
 
-        quizBox.innerHTML += `
-          <div class="mt-6 flex justify-center">
-            <button class="tb-btn" onclick="location.href='learning.html'">➡️ Move to next topic</button>
-          </div>
-        `;
-      } else {
-        quizBox.innerHTML += `
-          <p class="mt-5 text-center text-sm font-semibold text-rose-700">You need at least 70% to unlock the next topic.</p>
-          <div class="mt-4 flex justify-center">
-            <button class="tb-btn" onclick="location.reload()">🔁 Retry quiz</button>
-          </div>
-        `;
+        scoreCounter.textContent = "Score " + score + " / " + (step + 1);
+
+        var explain = document.getElementById("explain");
+        explain.className = "tb-explain";
+        explain.innerHTML =
+          '<strong class="font-extrabold text-teal-400">' +
+          (index === current.answer ? "Correct. " : "Explanation: ") +
+          "</strong>" +
+          esc(current.explanation || "");
+
+        var nextBtn = document.getElementById("nextBtn");
+        nextBtn.disabled = false;
+        nextBtn.textContent = step + 1 >= order.length ? "See my result →" : "Next question →";
+        nextBtn.focus();
       }
-    }
+
+      function next() {
+        if (!answered) return;
+        step++;
+        render();
+      }
+
+      /* ---------------------------------------------------------- *
+       * Result — informational only, nothing is unlocked or blocked
+       * ---------------------------------------------------------- */
+      function finish() {
+        var pct = order.length ? Math.round((score / order.length) * 100) : 0;
+
+        // Remember the personal best purely so the practice page can show it.
+        // Nothing reads this to allow or block anything.
+        var raw = window.TB.store("tb_best_" + topicId, null);
+        var prev = raw === null ? -1 : parseInt(raw, 10);
+        if (isNaN(prev) || pct > prev) window.TB.save("tb_best_" + topicId, String(pct));
+
+        var tone =
+          pct >= 80 ? { line: "Outstanding score on this topic.", color: "#10b981" } :
+          pct >= 60 ? { line: "Good progress. Review the notes to sharpen remaining areas.", color: "#38bdf8" } :
+          pct >= 40 ? { line: "Good effort. Reviewing the notes will reinforce these concepts.", color: "#f59e0b" } :
+                      { line: "Review the topic notes and try again.", color: "#fb7185" };
+
+        progressBar.style.width = "100%";
+        qCounter.textContent = "Completed";
+        scoreCounter.textContent = "Score " + score + " / " + order.length;
+
+        var nextTopic = window.TB.topics[(indexOfTopic() + 1) % window.TB.topics.length];
+
+        body.innerHTML =
+          '<div class="tb-cheer text-center">' +
+            '<div class="tb-result-ring" style="background: conic-gradient(' + tone.color + ' ' + (pct * 3.6) + 'deg, var(--tb-border) 0deg)">' +
+              '<div class="grid h-28 w-28 place-items-center rounded-full bg-[var(--tb-surface-2)] shadow-inner">' +
+                '<div><div class="text-3xl font-extrabold" style="color:' + tone.color + '">' + pct + '%</div>' +
+                '<div class="text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400">' + score + ' of ' + order.length + '</div></div>' +
+              "</div>" +
+            "</div>" +
+            '<h1 class="mt-6 text-2xl font-extrabold">' + meta.title + " quiz complete</h1>" +
+            '<p class="tb-muted mx-auto mt-2 max-w-md">' + tone.line + '</p>' +
+          "</div>" +
+          '<div class="mt-7 grid gap-3 sm:grid-cols-2">' +
+            '<button class="tb-btn" type="button" id="retry">Try again</button>' +
+            '<a class="tb-btn-secondary" href="Notes/' + meta.note + '">Re-read notes</a>' +
+            '<a class="tb-btn-secondary" href="all_quiz.html?topic=' + encodeURIComponent(nextTopic.id) + '">Practise ' + nextTopic.title + '</a>' +
+            '<a class="tb-btn-secondary" href="practice.html">All topics</a>' +
+          "</div>";
+
+        document.getElementById("retry").addEventListener("click", function () {
+          order = shuffle(questions.length);
+          step = 0;
+          score = 0;
+          render();
+        });
+
+        if (pct >= 60) window.TB.confetti(pct >= 80 ? 130 : 80);
+      }
+
+      function indexOfTopic() {
+        for (var i = 0; i < window.TB.topics.length; i++) {
+          if (window.TB.topics[i].id === topicId) return i;
+        }
+        return 0;
+      }
+
+      function esc(s) {
+        return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+        });
+      }
+
+      /* ---------------------------------------------------------- *
+       * Keyboard shortcuts
+       * ---------------------------------------------------------- */
+      document.addEventListener("keydown", function (e) {
+        if (e.target && /^(INPUT|TEXTAREA)$/.test(e.target.tagName)) return;
+
+        if (!answered && /^[1-6]$/.test(e.key)) {
+          var opts = document.querySelectorAll(".tb-option");
+          var idx = parseInt(e.key, 10) - 1;
+          if (opts[idx]) opts[idx].click();
+        } else if (answered && e.key === "Enter") {
+          var btn = document.getElementById("nextBtn");
+          if (btn && !btn.disabled) btn.click();
+        }
+      });
+    })();
   </script>
-
-
-
 </body>
 
 </html>

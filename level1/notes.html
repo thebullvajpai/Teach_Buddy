@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Notes · TeachBuddy</title>
+  <meta name="description" content="Clear grammar notes covering all 11 core English topics.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="../css/output.css">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0a0f'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='52' fill='%233db8a0' text-anchor='middle'>TB</text></svg>">
+</head>
+
+<body class="tb-shell">
+
+  <div class="tb-container">
+
+    <!-- ============================ HEAD ============================ -->
+    <header class="tb-panel tb-reveal">
+      <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="tb-badge">Notes</span>
+            <span class="tb-badge-soft">Level 1</span>
+          </div>
+          <h1 class="tb-title-sm mt-5">The <span class="tb-gradient-text">grammar library</span></h1>
+          <p class="tb-muted mt-3 max-w-xl">
+            Eleven topics written from zero level, with examples, rules and tables.
+            Read them in any order.
+          </p>
+        </div>
+
+        <div class="grid shrink-0 grid-cols-2 gap-3 lg:w-56">
+          <div class="tb-stat">
+            <div class="tb-stat-num tb-gradient-text">11</div>
+            <div class="tb-stat-label">Topics</div>
+          </div>
+          <div class="tb-stat">
+            <div class="tb-stat-num tb-gradient-text">Level 1</div>
+            <div class="tb-stat-label">Foundation</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <div class="relative flex-1">
+          <input id="search" class="tb-input" type="search" placeholder="Search a topic: noun, tense, article…"
+            autocomplete="off">
+        </div>
+        <a class="tb-btn-secondary shrink-0" href="practice.html">Go to topic practice</a>
+      </div>
+    </header>
+
+    <!-- =========================== GRID ============================ -->
+    <div id="notesGrid" class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-3"></div>
+
+    <p id="empty" class="tb-muted mt-10 hidden text-center">No topic matches that search. Try “verb” or “tense”.</p>
+
+    <!-- ========================== NEXT UP =========================== -->
+    <section class="tb-panel tb-reveal mt-10">
+      <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+        <div>
+          <span class="tb-eyebrow">Finished reading?</span>
+          <h2 class="mt-2 text-2xl font-extrabold">Practice is right next door</h2>
+          <p class="tb-muted mt-2 max-w-xl">
+            Topic practice quizzes test one concept at a time, while mixed practice tests your overall comprehension.
+          </p>
+        </div>
+        <div class="flex shrink-0 flex-col gap-3 sm:flex-row">
+          <a class="tb-btn" href="practice.html">Topic practice</a>
+          <a class="tb-btn-secondary" href="../level2/level2_dashboard.html">Mixed practice</a>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="../js/site.js" data-root="../" data-page="notes"></script>
+  <script>
+    (function () {
+      var grid = document.getElementById("notesGrid");
+      var empty = document.getElementById("empty");
+      var search = document.getElementById("search");
+
+      window.TB.topics.forEach(function (t, i) {
+        var card = document.createElement("article");
+        card.className = "tb-tile tb-card-glow tb-reveal";
+        card.setAttribute("data-delay", String((i % 3) * 80));
+        card.setAttribute("data-title", t.title.toLowerCase() + " " + t.id);
+
+        card.innerHTML =
+          '<div class="flex items-start justify-between gap-3">' +
+            '<span class="tb-badge">' + t.title + '</span>' +
+            '<span class="tb-badge-soft">#' + String(i + 1).padStart(2, "0") + '</span>' +
+          '</div>' +
+          '<h3 class="tb-tile-title mt-4">' + t.title + '</h3>' +
+          '<p class="tb-tile-desc">' + t.blurb + '</p>' +
+          '<div class="mt-auto flex flex-wrap gap-2 pt-5">' +
+            '<a class="tb-btn flex-1 px-4 py-2.5" href="Notes/' + t.note + '">Read notes</a>' +
+            '<a class="tb-btn-soft" href="all_quiz.html?topic=' + encodeURIComponent(t.id) + '" title="Practise ' + t.title + '">Practice</a>' +
+          '</div>';
+
+        grid.appendChild(card);
+      });
+
+      window.TB.reveal();
+
+      search.addEventListener("input", function () {
+        var q = search.value.trim().toLowerCase();
+        var shown = 0;
+
+        grid.querySelectorAll("[data-title]").forEach(function (card) {
+          var match = !q || card.getAttribute("data-title").indexOf(q) !== -1;
+          card.style.display = match ? "" : "none";
+          if (match) shown++;
+        });
+
+        empty.classList.toggle("hidden", shown !== 0);
+      });
+    })();
+  </script>
+</body>
+
+</html>

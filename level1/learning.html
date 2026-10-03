@@ -4,36 +4,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Learning Dashboard</title>
+  <title>Redirecting · TeachBuddy</title>
+  <!-- The old combined "learning path" dashboard is now two open pages:
+       notes.html (reading) and practice.html (topic-wise practice). -->
+  <meta http-equiv="refresh" content="0; url=notes.html">
+  <link rel="canonical" href="notes.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="../css/output.css">
 </head>
 
-<body class="tb-shell tb-level1">
-
-  <div class="tb-container">
-    <header class="tb-header">
-      <div class="relative overflow-hidden rounded-3xl border border-white/40 bg-white/80 px-6 py-8 shadow-xl backdrop-blur sm:px-10">
-        <div class="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-indigo-500/10 blur-3xl"></div>
-        <div class="absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-fuchsia-500/10 blur-3xl"></div>
-        <div class="relative flex items-start justify-between gap-4">
-          <div>
-            <div class="tb-badge">Level 1 · Grammar foundations</div>
-            <h1 class="mt-4 text-3xl font-extrabold tracking-tight sm:text-5xl">Your learning path</h1>
-            <p class="mt-3 text-slate-700">Complete each topic and score at least 70% to unlock the next one.</p>
-          </div>
-          <button class="tb-btn-secondary" onclick="window.location.href='../index.html'">← Home</button>
-        </div>
+<body class="tb-shell">
+  <div class="tb-container-narrow">
+    <div class="tb-panel text-center">
+      <h1 class="text-2xl font-extrabold">Taking you to the notes library…</h1>
+      <p class="tb-muted mt-3">
+        Browse grammar notes or jump straight into topic practice.
+      </p>
+      <div class="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
+        <a class="tb-btn" href="notes.html">Notes</a>
+        <a class="tb-btn-secondary" href="practice.html">Topic Practice</a>
       </div>
-    </header>
-
-    <div id="topicsContainer" class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"></div>
-
-    <div class="mt-8 flex justify-end">
-      <button class="tb-btn" onclick="window.location.href='../level2/level2_dashboard.html'">Go to next level →</button>
     </div>
   </div>
 
-  <script src="learning.js"></script>
+  <script src="../js/site.js" data-root="../" data-page="notes"></script>
+  <script>window.location.replace("notes.html");</script>
 </body>
 
 </html>

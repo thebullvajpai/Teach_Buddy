@@ -1,43 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sentence Rearrangement Practice</title>
+  <title>Rearrange Sentences · TeachBuddy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
   <link rel="stylesheet" href="../css/output.css">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0a0f'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='52' fill='%233db8a0' text-anchor='middle'>TB</text></svg>">
 </head>
 
 <body class="tb-shell tb-rearrange">
 
-  <div class="tb-container">
-    <div class="mx-auto max-w-xl">
-      <header class="tb-header">
-        <div class="flex items-center justify-between gap-4">
-          <div>
-            <div class="tb-badge">Level 2 · Rearrangement</div>
-            <h1 class="tb-title">Arrange the sentence</h1>
-            <p class="tb-subtitle">Tap the words in the correct order.</p>
-          </div>
-          <button class="tb-btn-secondary" onclick="window.location.href='level2_dashboard.html'">← Back</button>
-        </div>
-      </header>
+  <div class="tb-container-narrow">
 
-      <div class="tb-card">
-        <div id="wordsBox" class="flex flex-wrap justify-center gap-2"></div>
+    <header class="tb-reveal mb-6 flex flex-wrap items-center justify-between gap-3">
+      <a class="tb-back" href="level2_dashboard.html">← Mixed practice</a>
+      <span class="tb-chip">Rearrange · Level 2</span>
+    </header>
 
-        <div id="answerBox" class="mt-5 min-h-[3rem] rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-900"></div>
+    <section class="tb-panel tb-reveal">
 
-        <div class="mt-5 flex flex-col gap-3 sm:flex-row">
-          <button class="tb-btn w-full" onclick="checkAnswer()">Check</button>
-          <button class="tb-btn-secondary w-full" onclick="nextQuestion()">Next question</button>
-        </div>
-
-        <p id="result" class="mt-4 text-sm font-semibold text-slate-700"></p>
+      <div class="flex items-center justify-between gap-3 text-xs font-bold uppercase tracking-[0.14em] text-violet-500">
+        <span id="counter">Loading…</span>
+        <span id="streak">Streak 0</span>
       </div>
-    </div>
+      <div class="tb-progress mt-2"><span id="bar" style="width:0%"></span></div>
+
+      <h1 class="mt-7 text-xl font-extrabold sm:text-2xl">Tap the words in the correct order</h1>
+      <p class="tb-muted mt-1.5">Tap a word again in the answer box to take it back out.</p>
+
+      <!-- answer -->
+      <div id="answerBox" class="tb-dropzone mt-5">
+        <span class="text-slate-400">Your sentence will appear here…</span>
+      </div>
+
+      <!-- word bank -->
+      <div id="wordsBox" class="mt-5 flex flex-wrap gap-2.5"></div>
+
+      <div id="result"></div>
+
+      <div class="mt-6 grid gap-3 sm:grid-cols-3">
+        <button class="tb-btn sm:col-span-2" type="button" id="checkBtn">Check answer</button>
+        <button class="tb-btn-secondary" type="button" id="clearBtn">Clear</button>
+      </div>
+
+      <div class="mt-3 grid gap-3 sm:grid-cols-2">
+        <button class="tb-btn-soft" type="button" id="revealBtn">Show answer</button>
+        <button class="tb-btn-soft" type="button" id="nextBtn">Next sentence →</button>
+      </div>
+
+    </section>
+
   </div>
 
+  <script src="../js/site.js" data-root="../" data-page="mixed"></script>
   <script src="sentence_rearrange.js"></script>
-
 </body>
+
 </html>

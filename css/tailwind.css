@@ -1,224 +1,1282 @@
 @import "tailwindcss";
 
+/* Explicit source scanning so every page/script is picked up by Tailwind v4. */
+@source "../index.html";
+@source "../js";
+@source "../level1";
+@source "../level2";
+@source "../level3";
+
+@theme {
+	--font-display: "Fredoka", "Baloo 2", ui-rounded, "Segoe UI", system-ui, sans-serif;
+	--font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, "Segoe UI", sans-serif;
+}
+
+/* ------------------------------------------------------------------ *
+ * Design tokens
+ * ------------------------------------------------------------------ */
+:root {
+	--tb-ink: #e2e4e9;
+	--tb-ink-soft: #9ba3b0;
+	--tb-bg-base: #0a0a0f;
+	--tb-bg-card: #13131a;
+	--tb-bg-surface: #1a1a24;
+	--tb-bg-elevated: #22222e;
+	--tb-border: rgba(255, 255, 255, 0.08);
+	--tb-border-hover: rgba(255, 255, 255, 0.14);
+
+	--tb-accent: #3db8a0;
+	--tb-accent-dim: #2a9a84;
+	--tb-accent-glow: rgba(61, 184, 160, 0.25);
+	--tb-secondary: #6880a0;
+	--tb-secondary-dim: #516a88;
+
+	--tb-amber: #e0a030;
+	--tb-emerald: #34b87a;
+	--tb-sky: #4aa8d8;
+	--tb-rose: #e06070;
+
+	--tb-nav-h: 4.25rem;
+
+	--tb-shadow-soft: 0 4px 20px -6px rgba(0, 0, 0, 0.5);
+	--tb-shadow-lift: 0 12px 36px -10px rgba(0, 0, 0, 0.7);
+	--tb-shadow-glow: 0 0 0 1px rgba(61, 184, 160, 0.2), 0 8px 24px -8px rgba(61, 184, 160, 0.2);
+}
+
+/* ------------------------------------------------------------------ *
+ * Keyframes
+ * ------------------------------------------------------------------ */
+@keyframes tb-drift {
+	0%   { transform: translate3d(0, 0, 0) scale(1); }
+	33%  { transform: translate3d(4%, -6%, 0) scale(1.08); }
+	66%  { transform: translate3d(-5%, 4%, 0) scale(0.95); }
+	100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@keyframes tb-float-up {
+	0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+	10%  { opacity: 0.3; }
+	90%  { opacity: 0.15; }
+	100% { transform: translateY(-115vh) rotate(260deg); opacity: 0; }
+}
+
+@keyframes tb-accent-shift {
+	0%, 100% { background-position: 0% 50%; }
+	50%      { background-position: 100% 50%; }
+}
+
+@keyframes tb-pop-in {
+	0%   { opacity: 0; transform: translateY(18px) scale(0.96); }
+	60%  { opacity: 1; transform: translateY(-4px) scale(1.015); }
+	100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes tb-bob {
+	0%, 100% { transform: translateY(0); }
+	50%      { transform: translateY(-8px); }
+}
+
+@keyframes tb-ring {
+	0%   { transform: scale(0.85); opacity: 0.7; }
+	70%  { transform: scale(1.5); opacity: 0; }
+	100% { transform: scale(1.5); opacity: 0; }
+}
+
+@keyframes tb-shine {
+	0%   { transform: translateX(-120%) skewX(-18deg); }
+	60%, 100% { transform: translateX(240%) skewX(-18deg); }
+}
+
+@keyframes tb-shake {
+	0%, 100% { transform: translateX(0); }
+	20%      { transform: translateX(-7px); }
+	40%      { transform: translateX(6px); }
+	60%      { transform: translateX(-4px); }
+	80%      { transform: translateX(3px); }
+}
+
+@keyframes tb-cheer {
+	0%   { transform: scale(0.6) rotate(-8deg); opacity: 0; }
+	55%  { transform: scale(1.12) rotate(4deg); opacity: 1; }
+	100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+@keyframes tb-confetti-fall {
+	0%   { transform: translate3d(0, -12vh, 0) rotate(0deg); opacity: 1; }
+	100% { transform: translate3d(var(--tb-x, 0px), 108vh, 0) rotate(var(--tb-r, 720deg)); opacity: 0; }
+}
+
+@keyframes tb-dots {
+	0%, 80%, 100% { transform: scale(0.6); opacity: 0.35; }
+	40%           { transform: scale(1); opacity: 1; }
+}
+
+@keyframes tb-slide-in {
+	from { opacity: 0; transform: translateX(28px) scale(0.98); }
+	to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes tb-sheen {
+	0%   { background-position: -220% 0; }
+	100% { background-position: 220% 0; }
+}
+
+@keyframes tb-glow-pulse {
+	0%, 100% { opacity: 0.4; }
+	50%      { opacity: 0.7; }
+}
+
+@keyframes tb-subtle-float {
+	0%, 100% { transform: translateY(0); }
+	50%      { transform: translateY(-4px); }
+}
+
+/* ------------------------------------------------------------------ *
+ * Base
+ * ------------------------------------------------------------------ */
 @layer base {
 	html {
 		@apply scroll-smooth;
+		scroll-padding-top: 6rem;
 	}
 
 	body {
-		@apply bg-gradient-to-br from-indigo-100 via-white to-fuchsia-100 text-slate-900 antialiased;
+		@apply text-[color:var(--tb-ink)] antialiased;
+		font-family: var(--font-sans);
+		background-color: var(--tb-bg-base);
+		margin: 0;
+	}
+
+	h1, h2, h3, h4, .tb-display {
+		font-family: var(--font-display);
+		letter-spacing: -0.01em;
 	}
 
 	::selection {
-		@apply bg-slate-900 text-white;
+		background: var(--tb-accent);
+		color: #0a0a0f;
 	}
 
 	a {
-		@apply text-indigo-700 hover:text-indigo-800;
+		@apply transition-colors;
+		color: var(--tb-accent);
 	}
+
+	a:hover {
+		color: #4fd4ba;
+	}
+
+	:focus-visible {
+		outline: 3px solid var(--tb-accent-glow);
+		outline-offset: 2px;
+		border-radius: 0.5rem;
+	}
+
+	/* Scrollbar */
+	html::-webkit-scrollbar { width: 11px; height: 11px; }
+	html::-webkit-scrollbar-track { background: transparent; }
+	html::-webkit-scrollbar-thumb {
+		background: var(--tb-bg-elevated);
+		border-radius: 99px;
+		border: 3px solid var(--tb-bg-base);
+	}
+	html::-webkit-scrollbar-thumb:hover {
+		background: var(--tb-secondary);
+	}
+
+	.tb-drawer-body::-webkit-scrollbar,
+	#chatBox::-webkit-scrollbar { width: 6px; height: 6px; }
+
+	.tb-drawer-body::-webkit-scrollbar-track,
+	#chatBox::-webkit-scrollbar-track { background: transparent; }
+
+	.tb-drawer-body::-webkit-scrollbar-thumb,
+	#chatBox::-webkit-scrollbar-thumb { background: var(--tb-secondary-dim); border-radius: 99px; }
 }
 
+/* ------------------------------------------------------------------ *
+ * Components
+ * ------------------------------------------------------------------ */
 @layer components {
+
+	/* ---- Shell & background -------------------------------------- */
 	.tb-shell {
-		@apply min-h-screen;
+		@apply relative min-h-screen;
+		padding-top: var(--tb-nav-h);
+	}
+
+	.tb-aurora {
+		@apply pointer-events-none fixed inset-0 -z-10 overflow-hidden;
+	}
+
+	.tb-aurora span {
+		@apply absolute block rounded-full;
+		filter: blur(90px);
+		opacity: 0.15;
+		animation: tb-drift 26s ease-in-out infinite;
+	}
+
+	.tb-aurora .tb-b1 {
+		width: 42rem; height: 42rem; top: -14rem; left: -12rem;
+		background: radial-gradient(circle at 30% 30%, var(--tb-accent), transparent 70%);
+	}
+	.tb-aurora .tb-b2 {
+		width: 38rem; height: 38rem; top: 18%; right: -14rem;
+		background: radial-gradient(circle at 60% 40%, var(--tb-secondary), transparent 70%);
+		animation-duration: 32s; animation-delay: -6s;
+	}
+	.tb-aurora .tb-b3 {
+		width: 34rem; height: 34rem; bottom: -12rem; left: 22%;
+		background: radial-gradient(circle at 50% 50%, var(--tb-sky), transparent 70%);
+		animation-duration: 38s; animation-delay: -14s;
+	}
+	.tb-aurora .tb-b4 {
+		width: 26rem; height: 26rem; bottom: 12%; right: 10%;
+		background: radial-gradient(circle at 50% 50%, var(--tb-accent-dim), transparent 70%);
+		opacity: 0.1;
+		animation-duration: 30s; animation-delay: -20s;
+	}
+
+	.tb-grid-lines {
+		@apply pointer-events-none fixed inset-0 -z-10;
+		background-image:
+			linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+			linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+		background-size: 64px 64px;
+		mask-image: radial-gradient(ellipse 100% 60% at 50% 0%, #000 30%, transparent 75%);
+	}
+
+	.tb-letters {
+		@apply pointer-events-none fixed inset-0 -z-10 overflow-hidden;
+	}
+
+	.tb-letters i {
+		@apply absolute bottom-[-10vh] block not-italic font-extrabold;
+		font-family: var(--font-display);
+		color: rgba(255, 255, 255, 0.04);
+		animation: tb-float-up linear infinite;
 	}
 
 	.tb-container {
-		@apply mx-auto w-full max-w-5xl px-4 py-10 sm:py-12;
+		@apply relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 sm:py-14;
 	}
 
-	.tb-header {
-		@apply mb-8 flex flex-col gap-2;
+	.tb-container-narrow {
+		@apply relative mx-auto w-full max-w-3xl px-4 py-10 sm:px-6 sm:py-14;
 	}
 
+	/* ---- Navbar --------------------------------------------------- */
+	.tb-nav {
+		@apply fixed inset-x-0 top-0 z-40 transition-all duration-300;
+		height: var(--tb-nav-h);
+		background: rgba(10, 10, 15, 0.7);
+		backdrop-filter: blur(16px) saturate(160%);
+		border-bottom: 1px solid var(--tb-border);
+	}
+
+	.tb-nav.tb-nav-scrolled {
+		background: rgba(10, 10, 15, 0.92);
+		box-shadow: 0 4px 24px -6px rgba(0, 0, 0, 0.6);
+	}
+
+	.tb-nav-inner {
+		@apply mx-auto flex h-full w-full max-w-6xl items-center justify-between gap-3 px-4 sm:px-6;
+	}
+
+	.tb-logo {
+		@apply flex shrink-0 items-center gap-2.5 no-underline;
+		color: var(--tb-ink);
+	}
+
+	.tb-logo:hover { color: var(--tb-ink); }
+
+	.tb-logo-mark {
+		@apply grid h-10 w-10 place-items-center text-lg font-extrabold text-white shadow-lg transition-transform duration-300;
+		font-family: var(--font-display);
+		background: var(--tb-accent);
+		border-radius: 10px;
+		box-shadow: 0 4px 16px -4px var(--tb-accent-glow);
+	}
+
+	.tb-logo:hover .tb-logo-mark { transform: rotate(-8deg) scale(1.06); }
+
+	.tb-logo-text {
+		@apply text-lg font-extrabold leading-none;
+		font-family: var(--font-display);
+	}
+
+	.tb-logo-sub {
+		@apply mt-0.5 block text-[10px] font-semibold uppercase tracking-[0.18em];
+		color: var(--tb-secondary);
+	}
+
+	.tb-nav-links {
+		@apply hidden items-center gap-1 lg:flex;
+	}
+
+	.tb-nav-link {
+		@apply relative px-3.5 py-2 text-sm font-semibold no-underline transition-all duration-200;
+		border-radius: 8px;
+		color: var(--tb-ink-soft);
+	}
+
+	.tb-nav-link:hover {
+		@apply -translate-y-px;
+		background: var(--tb-bg-surface);
+		color: var(--tb-ink);
+	}
+
+	.tb-nav-link.is-active {
+		@apply text-white shadow-md;
+		background: var(--tb-accent);
+	}
+
+	/* Scoped to .tb-nav so it beats .tb-btn's own display rule. */
+	.tb-nav .tb-nav-cta {
+		@apply hidden lg:inline-flex;
+	}
+
+	.tb-nav-toggle {
+		@apply grid h-11 w-11 shrink-0 place-items-center text-xl shadow-sm transition lg:hidden;
+		border-radius: 10px;
+		border: 1px solid var(--tb-border);
+		background: var(--tb-bg-surface);
+		color: var(--tb-accent);
+	}
+
+	.tb-nav-toggle:hover { @apply -translate-y-px shadow-md; }
+
+	.tb-mobile-menu {
+		@apply fixed inset-x-0 z-30 origin-top overflow-hidden px-4 pb-5 pt-2 transition-all duration-300 lg:hidden;
+		top: var(--tb-nav-h);
+		background: rgba(13, 13, 20, 0.96);
+		backdrop-filter: blur(16px);
+		border-bottom: 1px solid var(--tb-border);
+		max-height: 0;
+		opacity: 0;
+		transform: translateY(-8px);
+		pointer-events: none;
+	}
+
+	.tb-mobile-menu.is-open {
+		max-height: 32rem;
+		opacity: 1;
+		transform: translateY(0);
+		pointer-events: auto;
+		box-shadow: 0 24px 40px -24px rgba(0, 0, 0, 0.8);
+	}
+
+	.tb-mobile-menu a {
+		@apply mt-1.5 flex items-center gap-3 px-4 py-3 text-sm font-semibold no-underline transition;
+		border-radius: 10px;
+		color: var(--tb-ink-soft);
+	}
+
+	.tb-mobile-menu a:hover {
+		background: var(--tb-bg-surface);
+		color: var(--tb-ink);
+	}
+
+	.tb-mobile-menu a.is-active {
+		@apply text-white;
+		background: var(--tb-accent);
+	}
+
+	/* ---- Typography helpers --------------------------------------- */
 	.tb-badge {
-		@apply inline-flex w-fit items-center gap-2 rounded-full border border-white/20 bg-gradient-to-r from-indigo-600 to-violet-600 px-3 py-1 text-xs font-semibold text-white shadow-sm;
+		@apply inline-flex w-fit items-center gap-2 px-3.5 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] shadow-sm;
+		border-radius: 8px;
+		background: var(--tb-bg-elevated);
+		border: 1px solid var(--tb-border);
+		color: var(--tb-accent);
+	}
+
+	.tb-badge-soft {
+		@apply inline-flex w-fit items-center gap-2 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em];
+		border-radius: 8px;
+		background: var(--tb-bg-surface);
+		border: 1px solid var(--tb-border);
+		color: var(--tb-secondary);
 	}
 
 	.tb-title {
-		@apply text-3xl font-extrabold tracking-tight sm:text-5xl;
+		@apply text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl lg:text-6xl;
+		color: #ffffff;
+	}
+
+	.tb-title-sm {
+		@apply text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl;
+		color: #ffffff;
 	}
 
 	.tb-subtitle {
-		@apply text-slate-700;
+		@apply mt-4 max-w-2xl text-base leading-relaxed sm:text-lg;
+		color: var(--tb-ink-soft);
 	}
 
-	.tb-card {
-		@apply rounded-2xl border border-white/40 bg-white/80 p-6 shadow-lg backdrop-blur transition will-change-transform motion-reduce:transition-none;
-		@apply hover:-translate-y-1 hover:bg-white hover:shadow-xl motion-reduce:hover:translate-y-0;
+	.tb-gradient-text {
+		color: var(--tb-accent);
 	}
 
-	.tb-card-title {
-		@apply text-lg font-semibold;
+	.tb-eyebrow {
+		@apply text-xs font-bold uppercase tracking-[0.22em];
+		color: var(--tb-accent);
 	}
 
 	.tb-muted {
-		@apply text-sm text-slate-600;
+		@apply text-sm leading-relaxed;
+		color: var(--tb-ink-soft);
 	}
 
-	.tb-btn {
-		@apply inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition active:translate-y-px hover:from-indigo-700 hover:to-violet-700 focus:outline-none focus:ring-2 focus:ring-violet-300 focus:ring-offset-2 focus:ring-offset-slate-50 disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transform-none;
+	/* ---- Section header ------------------------------------------- */
+	.tb-section-head {
+		@apply mb-8 flex flex-col gap-3 sm:mb-10;
 	}
+
+	/* ---- Hero ------------------------------------------------------ */
+	.tb-hero {
+		@apply relative overflow-hidden px-6 py-12 text-white shadow-2xl sm:px-12 sm:py-16;
+		border-radius: 16px;
+		background: linear-gradient(135deg, #0d0d14 0%, #141420 45%, #1a1a28 100%);
+		border: 1px solid var(--tb-border);
+	}
+
+	.tb-hero::after {
+		content: "";
+		@apply pointer-events-none absolute inset-0;
+		background:
+			radial-gradient(60rem 30rem at 85% -10%, rgba(61, 184, 160, 0.08), transparent 60%),
+			radial-gradient(40rem 26rem at 5% 110%, rgba(74, 168, 216, 0.06), transparent 60%);
+	}
+
+	.tb-hero > * { @apply relative z-10; }
+
+	.tb-hero .tb-subtitle { color: rgba(255, 255, 255, 0.55); }
+
+	.tb-hero-orb {
+		@apply pointer-events-none absolute rounded-full;
+		filter: blur(60px);
+		opacity: 0.08;
+		animation: tb-drift 24s ease-in-out infinite;
+	}
+
+	/* ---- Panels & cards -------------------------------------------- */
+	.tb-panel {
+		@apply relative overflow-hidden p-6 shadow-xl sm:p-8;
+		border-radius: 12px;
+		background: var(--tb-bg-card);
+		border: 1px solid var(--tb-border);
+		box-shadow: var(--tb-shadow-soft);
+	}
+
+	.tb-card {
+		@apply relative overflow-hidden p-6 transition-all duration-300 will-change-transform;
+		border-radius: 12px;
+		background: var(--tb-bg-card);
+		border: 1px solid var(--tb-border);
+		box-shadow: var(--tb-shadow-soft);
+	}
+
+	.tb-card:hover {
+		@apply -translate-y-1.5;
+		background: var(--tb-bg-surface);
+		border-color: var(--tb-border-hover);
+		box-shadow: var(--tb-shadow-lift);
+	}
+
+	.tb-card-title {
+		@apply text-lg font-bold;
+		color: #ffffff;
+	}
+
+	/* Gradient halo that fades in on hover */
+	.tb-card-glow::before {
+		content: "";
+		@apply pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300;
+		border-radius: inherit;
+		padding: 1.5px;
+		background: linear-gradient(135deg, var(--tb-accent), var(--tb-secondary), var(--tb-sky));
+		-webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+		-webkit-mask-composite: xor;
+		mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+		mask-composite: exclude;
+	}
+
+	.tb-card-glow:hover::before { @apply opacity-100; }
+
+	/* ---- Topic tile (notes / practice grids) ------------------------ */
+	.tb-tile {
+		@apply relative flex h-full cursor-pointer flex-col overflow-hidden p-5 text-left no-underline transition-all duration-300;
+		border-radius: 12px;
+		background: var(--tb-bg-card);
+		border: 1px solid var(--tb-border);
+		color: var(--tb-ink);
+		box-shadow: var(--tb-shadow-soft);
+	}
+
+	.tb-tile:hover {
+		@apply -translate-y-2;
+		background: var(--tb-bg-surface);
+		border-color: var(--tb-border-hover);
+		box-shadow: var(--tb-shadow-lift);
+	}
+
+	.tb-tile::after {
+		content: "";
+		@apply absolute inset-x-0 bottom-0 h-1 origin-left scale-x-0 transition-transform duration-300;
+		background: linear-gradient(90deg, var(--tb-accent), var(--tb-sky));
+	}
+
+	.tb-tile:hover::after { @apply scale-x-100; }
+
+	.tb-tile-icon {
+		@apply grid h-14 w-14 shrink-0 place-items-center text-2xl shadow-md transition-transform duration-300;
+		border-radius: 12px;
+	}
+
+	.tb-tile:hover .tb-tile-icon { transform: rotate(-8deg) scale(1.08); }
+
+	.tb-tile-title {
+		@apply text-lg font-extrabold leading-tight;
+		font-family: var(--font-display);
+		color: #ffffff;
+	}
+
+	.tb-tile-desc {
+		@apply mt-1.5 text-sm leading-relaxed;
+		color: var(--tb-ink-soft);
+	}
+
+	.tb-tile-foot {
+		@apply mt-4 flex items-center justify-between gap-2 pt-3 text-sm font-bold;
+		border-top: 1px dashed rgba(255, 255, 255, 0.08);
+		color: var(--tb-accent);
+	}
+
+	.tb-tile-arrow {
+		@apply inline-block transition-transform duration-300;
+	}
+
+	.tb-tile:hover .tb-tile-arrow { transform: translateX(5px); }
+
+	/* Dark-appropriate icon fills */
+	.tb-i-violet  { background: linear-gradient(135deg, #2a2040, #3a2a5a); }
+	.tb-i-pink    { background: linear-gradient(135deg, #3a2030, #4a2840); }
+	.tb-i-amber   { background: linear-gradient(135deg, #3a3020, #4a3a28); }
+	.tb-i-emerald { background: linear-gradient(135deg, #1a3a2a, #204a34); }
+	.tb-i-sky     { background: linear-gradient(135deg, #1a2a3a, #20344a); }
+	.tb-i-rose    { background: linear-gradient(135deg, #3a2028, #4a2830); }
+	.tb-i-lime    { background: linear-gradient(135deg, #2a3a1a, #344a20); }
+	.tb-i-orange  { background: linear-gradient(135deg, #3a2a1a, #4a3420); }
+	.tb-i-cyan    { background: linear-gradient(135deg, #1a3038, #204044); }
+	.tb-i-indigo  { background: linear-gradient(135deg, #1a2040, #24284a); }
+	.tb-i-fuchsia { background: linear-gradient(135deg, #30203a, #3a284a); }
+
+	/* ---- Buttons ---------------------------------------------------- */
+	.tb-btn {
+		@apply relative inline-flex cursor-pointer items-center justify-center gap-2 overflow-hidden px-5 py-3 text-sm font-bold text-white no-underline transition-all duration-200;
+		border-radius: 10px;
+		background: var(--tb-accent);
+		box-shadow: 0 4px 16px -4px var(--tb-accent-glow);
+	}
+
+	.tb-btn:hover {
+		@apply -translate-y-0.5 text-white;
+		background: #4fd4ba;
+		box-shadow: 0 8px 24px -6px var(--tb-accent-glow);
+	}
+
+	.tb-btn:active { @apply translate-y-0; }
+
+	.tb-btn::after {
+		content: "";
+		@apply pointer-events-none absolute inset-y-0 left-0 w-1/3;
+		background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+		transform: translateX(-120%) skewX(-18deg);
+	}
+
+	.tb-btn:hover::after { animation: tb-shine 0.9s ease-out; }
+
+	.tb-btn:disabled {
+		@apply cursor-not-allowed opacity-45 shadow-none;
+		transform: none;
+	}
+
+	.tb-btn-lg { @apply px-7 py-4 text-base; }
 
 	.tb-btn-secondary {
-		@apply inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-900 shadow-sm transition active:translate-y-px hover:border-slate-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-violet-200 focus:ring-offset-2 focus:ring-offset-slate-50 motion-reduce:transform-none;
+		@apply inline-flex cursor-pointer items-center justify-center gap-2 px-5 py-3 text-sm font-bold no-underline shadow-sm transition-all duration-200;
+		border-radius: 10px;
+		border: 1px solid var(--tb-border);
+		background: var(--tb-bg-surface);
+		color: var(--tb-ink);
 	}
 
+	.tb-btn-secondary:hover {
+		@apply -translate-y-0.5;
+		border-color: var(--tb-border-hover);
+		background: var(--tb-bg-elevated);
+		color: #ffffff;
+		box-shadow: var(--tb-shadow-soft);
+	}
+
+	.tb-btn-ghost {
+		@apply inline-flex cursor-pointer items-center justify-center gap-2 px-5 py-3 text-sm font-bold text-white no-underline backdrop-blur transition-all duration-200;
+		border-radius: 10px;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		background: rgba(255, 255, 255, 0.06);
+	}
+
+	.tb-btn-ghost:hover {
+		@apply -translate-y-0.5 text-white;
+		background: rgba(255, 255, 255, 0.12);
+	}
+
+	.tb-btn-soft {
+		@apply inline-flex cursor-pointer items-center justify-center gap-2 px-4 py-2.5 text-sm font-bold no-underline transition-all duration-200;
+		border-radius: 8px;
+		background: var(--tb-bg-surface);
+		color: var(--tb-accent);
+	}
+
+	.tb-btn-soft:hover {
+		@apply -translate-y-0.5;
+		background: var(--tb-bg-elevated);
+		color: #4fd4ba;
+	}
+
+	.tb-back {
+		@apply inline-flex shrink-0 cursor-pointer items-center gap-2 px-4 py-2.5 text-sm font-bold no-underline shadow-sm transition-all duration-200;
+		border-radius: 10px;
+		border: 1px solid var(--tb-border);
+		background: var(--tb-bg-surface);
+		color: var(--tb-accent);
+	}
+
+	.tb-back:hover {
+		@apply -translate-x-0.5;
+		border-color: var(--tb-border-hover);
+		color: #4fd4ba;
+		box-shadow: var(--tb-shadow-soft);
+	}
+
+	/* ---- Inputs ----------------------------------------------------- */
 	.tb-input {
-		@apply w-full rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm outline-none placeholder:text-slate-400 shadow-sm transition focus:border-violet-200 focus:ring-2 focus:ring-violet-200;
+		@apply w-full px-4 py-3 text-sm font-medium shadow-sm outline-none transition;
+		border-radius: 10px;
+		border: 2px solid var(--tb-border);
+		background: var(--tb-bg-surface);
+		color: var(--tb-ink);
 	}
 
-	/* Level 1 dashboard cards created by learning.js */
-	.tb-level1 .topic-card {
-		@apply rounded-2xl border border-white/40 bg-white/80 p-5 shadow-lg backdrop-blur transition hover:-translate-y-1 hover:bg-white hover:shadow-xl motion-reduce:hover:translate-y-0;
+	.tb-input::placeholder {
+		color: var(--tb-ink-soft);
+		opacity: 0.6;
 	}
 
-	.tb-level1 .topic-card h3 {
-		@apply text-base font-semibold;
+	.tb-input:focus {
+		border-color: var(--tb-accent);
+		box-shadow: 0 0 0 4px var(--tb-accent-glow);
 	}
 
-	.tb-level1 .topic-card p {
-		@apply mt-2 text-sm text-slate-600;
+	/* ---- Stats ------------------------------------------------------ */
+	.tb-stat {
+		@apply px-5 py-4 text-center transition-transform duration-300;
+		border-radius: 10px;
+		background: var(--tb-bg-surface);
+		border: 1px solid var(--tb-border);
+		box-shadow: var(--tb-shadow-soft);
 	}
 
-	.tb-level1 .topic-card button {
-		@apply mt-3 mr-2 inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-semibold text-slate-900 shadow-sm transition hover:border-slate-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-violet-200 focus:ring-offset-2 focus:ring-offset-slate-50;
+	.tb-stat:hover { @apply -translate-y-1; }
+
+	.tb-stat-num {
+		@apply text-3xl font-extrabold;
+		font-family: var(--font-display);
+		color: var(--tb-accent);
 	}
 
-	.tb-level1 .topic-card button:last-child {
-		@apply mr-0;
+	.tb-stat-label {
+		@apply mt-1 text-xs font-bold uppercase tracking-[0.14em];
+		color: var(--tb-ink-soft);
 	}
 
-	.tb-level1 .locked {
-		@apply pointer-events-none opacity-60;
+	/* ---- Chips / pills ---------------------------------------------- */
+	.tb-chip {
+		@apply inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold shadow-sm;
+		border-radius: 8px;
+		border: 1px solid var(--tb-border);
+		background: var(--tb-bg-surface);
+		color: var(--tb-secondary);
 	}
 
-	/* Level 2 practice cards injected by level2.js */
-	.tb-level2 .card {
-		@apply rounded-2xl border border-white/40 bg-white/80 p-6 shadow-lg backdrop-blur transition hover:-translate-y-1 hover:bg-white hover:shadow-xl motion-reduce:hover:translate-y-0;
+	/* ---- Progress --------------------------------------------------- */
+	.tb-progress {
+		@apply h-2.5 w-full overflow-hidden;
+		border-radius: 6px;
+		background: var(--tb-bg-elevated);
 	}
 
-	.tb-level2 .card h3 {
-		@apply text-lg font-semibold;
+	.tb-progress > span {
+		@apply block h-full transition-[width] duration-700 ease-out;
+		border-radius: 6px;
+		background: linear-gradient(90deg, var(--tb-accent-dim), var(--tb-accent));
 	}
 
-	.tb-level2 .card p {
-		@apply mt-2 text-sm text-slate-600;
+	.tb-readbar {
+		@apply fixed inset-x-0 z-50 h-1 origin-left;
+		top: var(--tb-nav-h);
+		background: linear-gradient(90deg, var(--tb-accent-dim), var(--tb-accent), var(--tb-sky));
+		transform: scaleX(0);
 	}
 
-	.tb-level2 .card button {
-		@apply mt-4 inline-flex items-center justify-center rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50;
+	/* ---- Scroll reveal ----------------------------------------------- */
+	.tb-reveal {
+		opacity: 0;
+		transform: translateY(26px);
+		transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
 	}
 
-	.tb-level2 .card.locked {
-		@apply bg-slate-50;
+	.tb-reveal.tb-in {
+		opacity: 1;
+		transform: translateY(0);
 	}
 
-	.tb-level2 .card.locked button {
-		@apply bg-slate-400 hover:bg-slate-400;
+	/* ---- no-animation escape hatch ------------------------------------
+	   Set by site.js when CSS transitions are detected as frozen (throttled
+	   webviews, some embedded browsers). Nothing a learner needs to see or tap
+	   may depend on a transition actually running. */
+	html.tb-no-anim .tb-reveal {
+		opacity: 1 !important;
+		transform: none !important;
+		transition: none !important;
 	}
 
-	/* Quiz options (all_quiz.html) */
-	.tb-quiz .option {
-		@apply mt-3 w-full cursor-pointer rounded-xl border border-slate-200 bg-white px-4 py-3 text-left text-sm font-medium text-slate-900 shadow-sm transition hover:-translate-y-px hover:border-slate-300 hover:shadow-md motion-reduce:hover:translate-y-0;
+	html.tb-no-anim .tb-mobile-menu,
+	html.tb-no-anim .tb-drawer,
+	html.tb-no-anim .tb-drawer-backdrop { transition: none !important; }
+
+	html.tb-no-anim .tb-mobile-menu.is-open {
+		max-height: 32rem !important;
+		opacity: 1 !important;
+		transform: none !important;
 	}
 
-	.tb-quiz .correct {
-		@apply border-emerald-200 bg-emerald-50;
+	html.tb-no-anim .tb-drawer.is-open { opacity: 1 !important; transform: none !important; }
+	html.tb-no-anim .tb-drawer-backdrop.is-open { opacity: 1 !important; }
+
+	.tb-pop { animation: tb-pop-in 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+	/* ---- Floating AI coach launcher ---------------------------------- */
+	.tb-fab {
+		@apply fixed bottom-5 right-5 z-40 grid h-16 w-16 cursor-pointer place-items-center border-none text-2xl text-white transition-transform duration-300 sm:bottom-7 sm:right-7;
+		border-radius: 14px;
+		background: var(--tb-accent);
+		box-shadow: 0 8px 24px -6px var(--tb-accent-glow);
+		animation: tb-bob 3.6s ease-in-out infinite;
 	}
 
-	.tb-quiz .wrong {
-		@apply border-rose-200 bg-rose-50;
+	.tb-fab:hover { transform: scale(1.09) rotate(6deg); }
+
+	.tb-fab::before {
+		content: "";
+		@apply absolute inset-0;
+		border-radius: 14px;
+		border: 2px solid var(--tb-accent);
+		opacity: 0.4;
+		animation: tb-ring 2.6s ease-out infinite;
 	}
 
-	/* Rearrangement word chips (sentence_rearrange.js uses class 'word') */
-	.tb-rearrange .word {
-		@apply inline-flex cursor-pointer select-none items-center rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-900 shadow-sm transition hover:-translate-y-px hover:border-slate-300 hover:shadow-md motion-reduce:hover:translate-y-0;
+	.tb-fab-tip {
+		@apply pointer-events-none absolute right-[110%] top-1/2 hidden -translate-y-1/2 whitespace-nowrap px-3 py-2 text-xs font-bold text-white opacity-0 shadow-lg transition-opacity duration-200 sm:block;
+		border-radius: 8px;
+		background: var(--tb-bg-elevated);
 	}
 
-	/* AI chat bubbles (communication.html uses message + type classes) */
-	.tb-chat .message {
-		@apply mb-3 w-fit max-w-[85%] rounded-2xl border border-white/40 bg-white/85 px-4 py-3 text-sm text-slate-900 shadow-md backdrop-blur;
+	.tb-fab:hover .tb-fab-tip { @apply opacity-100; }
+
+	/* ---- AI coach drawer --------------------------------------------- */
+	.tb-drawer-backdrop {
+		@apply fixed inset-0 z-40 opacity-0 transition-opacity duration-300;
+		background: rgba(0, 0, 0, 0.6);
+		backdrop-filter: blur(3px);
+		pointer-events: none;
 	}
 
-	.tb-chat .message.user {
-		@apply ml-auto border-violet-200 bg-gradient-to-r from-indigo-600 to-violet-600 text-white;
+	.tb-drawer-backdrop.is-open { @apply opacity-100; pointer-events: auto; }
+
+	.tb-drawer {
+		@apply fixed bottom-0 right-0 z-50 flex w-full max-w-[26rem] flex-col overflow-hidden backdrop-blur-xl transition-all duration-300 sm:bottom-5 sm:right-5;
+		height: min(34rem, 88vh);
+		border-radius: 0;
+		background: var(--tb-bg-card);
+		border: 1px solid var(--tb-border);
+		box-shadow: 0 20px 50px -14px rgba(0, 0, 0, 0.7);
+		opacity: 0;
+		transform: translateY(24px) scale(0.96);
+		pointer-events: none;
 	}
 
-	.tb-chat .message.ai {
-		@apply bg-white;
+	@media (min-width: 640px) {
+		.tb-drawer {
+			border-radius: 14px;
+		}
 	}
 
-	.tb-chat .message.correction {
-		@apply border-amber-200 bg-amber-50 text-amber-900;
+	.tb-drawer.is-open {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+		pointer-events: auto;
 	}
 
-	/* Notes pages: keep markup, style via scoped selectors */
+	.tb-drawer-head {
+		@apply flex shrink-0 items-center gap-3 px-4 py-3.5 text-white;
+		background: var(--tb-bg-elevated);
+		border-bottom: 1px solid var(--tb-border);
+	}
+
+	.tb-drawer-body {
+		@apply flex-1 overflow-y-auto overflow-x-hidden px-4 py-4;
+		background: var(--tb-bg-base);
+	}
+
+	.tb-drawer-foot {
+		@apply flex shrink-0 items-center gap-2 px-3 py-3;
+		border-top: 1px solid var(--tb-border);
+		background: var(--tb-bg-card);
+	}
+
+	/* Quick-reply strip: one scrollable row so it never eats the chat area. */
+	.tb-starter-row {
+		@apply flex shrink-0 flex-nowrap gap-1.5 overflow-x-auto overflow-y-hidden px-3 py-2;
+		border-top: 1px solid var(--tb-border);
+		background: var(--tb-bg-surface);
+		scrollbar-width: none;
+	}
+
+	.tb-starter-row::-webkit-scrollbar { display: none; }
+
+	.tb-starter-row .tb-suggest { @apply shrink-0; }
+
+	.tb-iconbtn {
+		@apply inline-flex h-9 min-w-9 shrink-0 cursor-pointer items-center justify-center gap-0.5 whitespace-nowrap px-2 text-base leading-none transition;
+		border-radius: 8px;
+		border: none;
+		background: rgba(255, 255, 255, 0.08);
+		color: var(--tb-ink-soft);
+	}
+
+	.tb-iconbtn:hover {
+		background: rgba(255, 255, 255, 0.15);
+		color: #ffffff;
+	}
+
+	/* ---- Chat bubbles (shared by drawer + level 3 page) --------------- */
+	.tb-chat .message,
+	.tb-drawer .message {
+		@apply mb-3 w-fit max-w-[86%] px-4 py-2.5 text-sm leading-relaxed shadow-sm;
+		border-radius: 12px;
+		animation: tb-slide-in 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+		white-space: pre-wrap;
+		overflow-wrap: anywhere;
+	}
+
+	.tb-chat .message.ai,
+	.tb-drawer .message.ai {
+		border-bottom-left-radius: 4px;
+		border: 1px solid var(--tb-border);
+		background: var(--tb-bg-surface);
+		color: var(--tb-ink);
+	}
+
+	.tb-chat .message.user,
+	.tb-drawer .message.user {
+		@apply ml-auto text-white;
+		border-bottom-right-radius: 4px;
+		background: var(--tb-accent);
+	}
+
+	.tb-chat .message.correction,
+	.tb-drawer .message.correction {
+		border: 1px solid rgba(224, 160, 48, 0.3);
+		background: rgba(224, 160, 48, 0.08);
+		color: var(--tb-amber);
+		font-weight: 600;
+	}
+
+	.tb-chat .message.system,
+	.tb-drawer .message.system {
+		@apply mx-auto text-center text-xs font-semibold;
+		border: 1px solid var(--tb-border);
+		background: var(--tb-bg-surface);
+		color: var(--tb-secondary);
+	}
+
+	.tb-typing {
+		@apply mb-3 flex w-fit items-center gap-1.5 px-4 py-3 shadow-sm;
+		border-radius: 12px;
+		border-bottom-left-radius: 4px;
+		border: 1px solid var(--tb-border);
+		background: var(--tb-bg-surface);
+	}
+
+	.tb-typing i {
+		@apply block h-2 w-2 rounded-full;
+		background: var(--tb-accent);
+		animation: tb-dots 1.2s infinite ease-in-out;
+	}
+
+	.tb-typing i:nth-child(2) { animation-delay: 0.16s; }
+	.tb-typing i:nth-child(3) { animation-delay: 0.32s; }
+
+	.tb-suggest {
+		@apply cursor-pointer px-3 py-1.5 text-xs font-bold transition;
+		border-radius: 8px;
+		border: 1px solid var(--tb-border);
+		background: var(--tb-bg-card);
+		color: var(--tb-accent);
+	}
+
+	.tb-suggest:hover {
+		@apply -translate-y-px;
+		background: var(--tb-bg-elevated);
+		box-shadow: var(--tb-shadow-soft);
+	}
+
+	/* ---- Quiz -------------------------------------------------------- */
+	.tb-option {
+		@apply flex w-full cursor-pointer items-center gap-3 px-4 py-3.5 text-left text-sm font-semibold shadow-sm transition-all duration-200;
+		border-radius: 10px;
+		border: 2px solid var(--tb-border);
+		background: var(--tb-bg-surface);
+		color: var(--tb-ink);
+	}
+
+	.tb-option:hover:not(.is-locked) {
+		@apply -translate-y-0.5;
+		border-color: var(--tb-accent);
+		box-shadow: 0 8px 20px -10px var(--tb-accent-glow);
+	}
+
+	.tb-option-key {
+		@apply grid h-8 w-8 shrink-0 place-items-center text-xs font-extrabold transition;
+		border-radius: 8px;
+		background: var(--tb-bg-elevated);
+		color: var(--tb-accent);
+	}
+
+	.tb-option.is-correct {
+		border-color: var(--tb-emerald);
+		background: rgba(52, 184, 122, 0.08);
+		color: var(--tb-emerald);
+	}
+
+	.tb-option.is-correct .tb-option-key {
+		background: var(--tb-emerald);
+		color: #ffffff;
+	}
+
+	.tb-option.is-wrong {
+		border-color: var(--tb-rose);
+		background: rgba(224, 96, 112, 0.08);
+		color: var(--tb-rose);
+		animation: tb-shake 0.45s ease-in-out;
+	}
+
+	.tb-option.is-wrong .tb-option-key {
+		background: var(--tb-rose);
+		color: #ffffff;
+	}
+
+	.tb-option.is-locked { @apply cursor-default; }
+
+	.tb-explain {
+		@apply mt-4 px-4 py-3 text-sm leading-relaxed;
+		border-radius: 10px;
+		border-left: 4px solid var(--tb-accent);
+		background: rgba(61, 184, 160, 0.06);
+		color: var(--tb-ink-soft);
+		animation: tb-pop-in 0.4s ease-out both;
+	}
+
+	.tb-result-ring {
+		@apply relative mx-auto grid h-36 w-36 place-items-center rounded-full;
+	}
+
+	.tb-cheer { animation: tb-cheer 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; }
+
+	.tb-confetti {
+		@apply pointer-events-none fixed inset-0 z-[60] overflow-hidden;
+	}
+
+	.tb-confetti i {
+		@apply absolute block;
+		width: 9px; height: 14px;
+		border-radius: 2px;
+		animation: tb-confetti-fall linear forwards;
+	}
+
+	/* ---- Word chips (rearrange) --------------------------------------- */
+	.tb-rearrange .word,
+	.tb-word {
+		@apply inline-flex cursor-pointer select-none items-center px-4 py-2.5 text-sm font-bold shadow-sm transition-all duration-200;
+		border-radius: 10px;
+		border: 2px solid var(--tb-border);
+		background: var(--tb-bg-surface);
+		color: var(--tb-ink);
+	}
+
+	.tb-rearrange .word:hover,
+	.tb-word:hover {
+		@apply -translate-y-1;
+		border-color: var(--tb-accent);
+		color: var(--tb-accent);
+		box-shadow: 0 8px 20px -10px var(--tb-accent-glow);
+	}
+
+	.tb-rearrange .word.is-used,
+	.tb-word.is-used {
+		@apply pointer-events-none shadow-none;
+		border-style: dashed;
+		border-color: var(--tb-border);
+		background: var(--tb-bg-elevated);
+		color: rgba(255, 255, 255, 0.2);
+		transform: none;
+	}
+
+	.tb-dropzone {
+		@apply flex min-h-[4.5rem] flex-wrap items-center gap-2 px-4 py-3 text-sm;
+		border-radius: 10px;
+		border: 2px dashed rgba(255, 255, 255, 0.1);
+		background: var(--tb-bg-surface);
+	}
+
+	.tb-feedback-ok {
+		@apply mt-4 px-4 py-3 text-sm font-bold;
+		border-radius: 10px;
+		border: 1px solid rgba(52, 184, 122, 0.3);
+		background: rgba(52, 184, 122, 0.08);
+		color: var(--tb-emerald);
+		animation: tb-pop-in 0.4s ease-out both;
+	}
+
+	.tb-feedback-bad {
+		@apply mt-4 px-4 py-3 text-sm font-bold;
+		border-radius: 10px;
+		border: 1px solid rgba(224, 96, 112, 0.3);
+		background: rgba(224, 96, 112, 0.08);
+		color: var(--tb-rose);
+		animation: tb-shake 0.45s ease-in-out;
+	}
+
+	/* ---- Marquee ------------------------------------------------------ */
+	.tb-shimmer {
+		background: linear-gradient(90deg, rgba(255, 255, 255, 0.03) 25%, rgba(255, 255, 255, 0.06) 50%, rgba(255, 255, 255, 0.03) 75%);
+		background-size: 220% 100%;
+		animation: tb-sheen 1.4s linear infinite;
+	}
+
+	/* ---- Footer -------------------------------------------------------- */
+	.tb-footer {
+		@apply relative mt-16;
+		border-top: 1px solid var(--tb-border);
+		background: var(--tb-bg-card);
+	}
+
+	.tb-footer-inner {
+		@apply mx-auto flex w-full max-w-6xl flex-col items-center gap-3 px-4 py-8 text-center sm:px-6;
+	}
+
+	/* ------------------------------------------------------------------ *
+	 * Notes pages — markup is fixed, so everything is styled by element
+	 * ------------------------------------------------------------------ */
+	/* Long-form reading gets its own opaque sheet */
 	.tb-notes .container {
-		@apply mx-auto w-full max-w-4xl px-4 py-10;
+		@apply relative mx-auto mb-10 w-full max-w-3xl px-5 pb-12 pt-10 sm:px-10;
+		border-radius: 14px;
+		background: var(--tb-bg-card);
+		border: 1px solid var(--tb-border);
+		box-shadow: var(--tb-shadow-soft);
 	}
 
-	.tb-notes h1 {
-		@apply text-center text-3xl font-extrabold tracking-tight sm:text-4xl;
+	.tb-notes .container > h1 {
+		@apply mb-8 text-center text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl;
+		color: var(--tb-accent);
 	}
 
 	.tb-notes h2 {
-		@apply mt-10 text-xl font-semibold;
+		@apply relative mt-12 scroll-mt-28 pl-4 text-xl font-extrabold sm:text-2xl;
+		color: #ffffff;
+	}
+
+	.tb-notes h2::before {
+		content: "";
+		@apply absolute left-0 top-1 h-[1.35em] w-1.5;
+		border-radius: 4px;
+		background: linear-gradient(180deg, var(--tb-accent), var(--tb-sky));
 	}
 
 	.tb-notes h3 {
-		@apply mt-6 text-lg font-semibold text-slate-800;
+		@apply mt-7 text-base font-extrabold sm:text-lg;
+		color: var(--tb-accent);
 	}
 
 	.tb-notes p {
-		@apply mt-3 text-slate-700;
+		@apply mt-3 leading-relaxed;
+		color: var(--tb-ink-soft);
 	}
 
-	.tb-notes ul {
-		@apply mt-3 list-disc pl-6 text-slate-700;
+	.tb-notes strong {
+		@apply font-bold;
+		color: var(--tb-ink);
+	}
+
+	.tb-notes ul { @apply mt-3 list-none space-y-2 pl-1; }
+
+	.tb-notes ul > li {
+		@apply relative pl-6 leading-relaxed;
+		color: var(--tb-ink-soft);
+	}
+
+	.tb-notes ul > li::before {
+		content: "";
+		@apply absolute left-0 top-[0.62em] h-2 w-2 rounded-full;
+		background: var(--tb-accent);
 	}
 
 	.tb-notes ol {
-		@apply mt-3 list-decimal pl-6 text-slate-700;
+		@apply mt-3 list-decimal space-y-2 pl-6 leading-relaxed;
+		color: var(--tb-ink-soft);
 	}
 
-	.tb-notes li {
-		@apply mt-2;
+	.tb-notes ol::marker {
+		@apply font-bold;
+		color: var(--tb-accent);
 	}
 
 	.tb-notes hr {
-		@apply my-10 border-slate-200;
+		@apply my-10 h-px border-0;
+		background: linear-gradient(90deg, transparent, var(--tb-border), transparent);
 	}
 
 	.tb-notes .card {
-		@apply mt-6 rounded-2xl border border-white/40 bg-white/80 p-6 shadow-lg backdrop-blur;
+		@apply mt-6 p-6;
+		border-radius: 12px;
+		background: var(--tb-bg-surface);
+		border: 1px solid var(--tb-border);
+		box-shadow: var(--tb-shadow-soft);
 	}
 
 	.tb-notes .example {
-		@apply mt-4 rounded-xl border border-indigo-100 bg-indigo-50/60 p-4;
+		@apply relative mt-5 p-5 pt-7;
+		border-radius: 10px;
+		border: 1px solid rgba(61, 184, 160, 0.2);
+		background: rgba(61, 184, 160, 0.04);
+	}
+
+	.tb-notes .example::before {
+		content: "Example";
+		@apply absolute -top-3 left-4 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white shadow-sm;
+		border-radius: 6px;
+		background: var(--tb-accent-dim);
 	}
 
 	.tb-notes .note {
-		@apply mt-4 rounded-xl border border-amber-200 bg-amber-50/70 p-4;
+		@apply relative mt-5 p-5 pt-7;
+		border-radius: 10px;
+		border: 1px solid rgba(224, 160, 48, 0.2);
+		background: rgba(224, 160, 48, 0.04);
+	}
+
+	.tb-notes .note::before {
+		content: "Note";
+		@apply absolute -top-3 left-4 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white shadow-sm;
+		border-radius: 6px;
+		background: var(--tb-amber);
 	}
 
 	.tb-notes .rule {
-		@apply mt-4 rounded-xl border border-emerald-200 bg-emerald-50/70 p-4;
+		@apply relative mt-5 p-5 pt-7;
+		border-radius: 10px;
+		border: 1px solid rgba(52, 184, 122, 0.2);
+		background: rgba(52, 184, 122, 0.04);
 	}
 
+	.tb-notes .rule::before {
+		content: "Rule";
+		@apply absolute -top-3 left-4 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white shadow-sm;
+		border-radius: 6px;
+		background: var(--tb-emerald);
+	}
+
+	.tb-notes .example p:first-of-type,
+	.tb-notes .note p:first-of-type,
+	.tb-notes .rule p:first-of-type,
+	.tb-notes .example ul:first-child,
+	.tb-notes .note ul:first-child,
+	.tb-notes .rule ul:first-child { @apply mt-0; }
+
 	.tb-notes table {
-		@apply mt-4 block w-full overflow-x-auto rounded-xl border border-white/40 bg-white/80 shadow-md backdrop-blur;
+		@apply mt-5 block w-full overflow-x-auto text-left;
+		border-radius: 10px;
+		border: 1px solid var(--tb-border);
+		background: var(--tb-bg-surface);
+		border-collapse: separate;
+		border-spacing: 0;
+		box-shadow: var(--tb-shadow-soft);
 	}
 
 	.tb-notes thead {
-		@apply bg-slate-50;
+		background: var(--tb-bg-elevated);
 	}
 
 	.tb-notes th {
-		@apply whitespace-nowrap px-3 py-2 text-left text-xs font-semibold text-slate-700;
+		@apply whitespace-nowrap px-4 py-3 text-xs font-extrabold uppercase tracking-[0.1em];
+		color: var(--tb-accent);
 	}
 
 	.tb-notes td {
-		@apply whitespace-nowrap px-3 py-2 text-sm text-slate-700;
+		@apply px-4 py-3 align-top text-sm;
+		color: var(--tb-ink-soft);
+		border-top: 1px solid var(--tb-border);
 	}
+
+	.tb-notes tbody tr { @apply transition-colors; }
+	.tb-notes tbody tr:hover { background: var(--tb-bg-elevated); }
+
+	/* The trailing "Go to Quiz" button that ships with every notes page */
+	.tb-notes > button,
+	.tb-notes .container ~ button {
+		@apply mx-auto mb-16 flex cursor-pointer items-center justify-center gap-2 border-none px-7 py-4 text-base font-bold text-white transition-all duration-200;
+		font-family: var(--font-display);
+		border-radius: 10px;
+		background: var(--tb-accent);
+		box-shadow: 0 8px 24px -8px var(--tb-accent-glow);
+	}
+
+	.tb-notes > button:hover,
+	.tb-notes .container ~ button:hover {
+		transform: translateY(-3px) scale(1.02);
+		box-shadow: 0 14px 30px -8px var(--tb-accent-glow);
+	}
+
+	/* Notes page toolbar injected by site.js */
+	.tb-notes-bar {
+		@apply relative mx-auto mb-2 flex w-full max-w-3xl flex-wrap items-center justify-between gap-3 px-4 pt-8 sm:px-6;
+	}
+}
+
+/* ------------------------------------------------------------------ *
+ * Reduced motion
+ * ------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+	*, *::before, *::after {
+		animation-duration: 0.001ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.001ms !important;
+		scroll-behavior: auto !important;
+	}
+
+	.tb-reveal { opacity: 1; transform: none; }
+	.tb-letters, .tb-confetti { display: none; }
 }

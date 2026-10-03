@@ -1,100 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sentence Translation Practice</title>
-    <link rel="stylesheet" href="../css/output.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Translate Sentences · TeachBuddy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+  <link rel="stylesheet" href="../css/output.css">
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230a0a0f'/><text x='50%' y='68%' font-family='sans-serif' font-weight='800' font-size='52' fill='%233db8a0' text-anchor='middle'>TB</text></svg>">
 </head>
 
 <body class="tb-shell">
 
-    <div class="tb-container">
-        <div class="mx-auto max-w-2xl">
-            <header class="tb-header">
-                <div class="flex items-center justify-between gap-4">
-                    <div>
-                        <div class="tb-badge">Level 2 · Translation</div>
-                        <h1 class="tb-title">Sentence translation</h1>
-                        <p class="tb-subtitle">Translate the sentence into natural English.</p>
-                    </div>
-                    <button class="tb-btn-secondary" onclick="window.location.href='level2_dashboard.html'">← Back</button>
-                </div>
-            </header>
+  <div class="tb-container-narrow">
 
-            <div class="tb-card">
-                <p id="question" class="text-base font-semibold text-slate-900"></p>
+    <header class="tb-reveal mb-6 flex flex-wrap items-center justify-between gap-3">
+      <a class="tb-back" href="level2_dashboard.html">← Mixed practice</a>
+      <span class="tb-chip">Translation · Level 2</span>
+    </header>
 
-                <div class="mt-4">
-                    <input class="tb-input" type="text" id="userAnswer" placeholder="Type your translation here">
-                </div>
+    <section class="tb-panel tb-reveal">
 
-                <div class="mt-5 flex flex-col gap-3 sm:flex-row">
-                    <button class="tb-btn w-full" onclick="checkAnswer()">Check</button>
-                    <button class="tb-btn-secondary w-full" onclick="nextQuestion()">Next</button>
-                </div>
+      <div class="flex items-center justify-between gap-3 text-xs font-bold uppercase tracking-[0.14em] text-violet-500">
+        <span id="counter">Loading…</span>
+        <span id="streak">Streak 0</span>
+      </div>
+      <div class="tb-progress mt-2"><span id="bar" style="width:0%"></span></div>
 
-                <p id="result" class="mt-4 text-sm font-semibold text-slate-700"></p>
-            </div>
-        </div>
-    </div>
+      <div class="mt-7 rounded-2xl border border-[var(--tb-border)] bg-[var(--tb-surface-2)] px-5 py-5">
+        <div class="tb-eyebrow">Translate into English</div>
+        <p id="question" class="mt-2 text-xl font-extrabold leading-snug text-[color:var(--tb-ink)]"></p>
+      </div>
 
-<script>
-let questions=[];
-let currentIndex=0;
+      <div class="mt-5">
+        <input class="tb-input text-base" type="text" id="userAnswer" placeholder="Write the English sentence here…"
+          autocomplete="off" autocapitalize="sentences">
+      </div>
 
-fetch('data/sentence_translation.json')
-.then(res=>{
-    if(!res.ok) throw new Error("Failed to load JSON");
-    return res.json();
-})
-.then(data=>{
-    questions=data.questions;
-    loadQuestion();
-})
-.catch(err=>{
-    document.getElementById("result").innerText="Error loading questions.";
-    console.error(err);
-});
+      <div id="result"></div>
 
-function loadQuestion(){
-    document.getElementById("question").innerText =
-        questions[currentIndex].question;
+      <div class="mt-6 grid gap-3 sm:grid-cols-2">
+        <button class="tb-btn" type="button" id="checkBtn">Check answer</button>
+        <button class="tb-btn-secondary" type="button" id="nextBtn">Next sentence →</button>
+      </div>
 
-    document.getElementById("userAnswer").value="";
-    document.getElementById("result").innerText="";
-}
+      <div class="mt-3 grid gap-3 sm:grid-cols-2">
+        <button class="tb-btn-soft" type="button" id="hintBtn">Give hint</button>
+        <button class="tb-btn-soft" type="button" id="revealBtn">Show answer</button>
+      </div>
 
-function normalize(text){
-    return text.trim().toLowerCase().replace(/[.]/g,"");
-}
+      <p class="tb-muted mt-5 text-center text-xs">
+        Capitalisation and full stops are ignored. Words are compared directly.
+      </p>
 
-function checkAnswer(){
-    const user = normalize(
-        document.getElementById("userAnswer").value
-    );
+    </section>
 
-    const correct = normalize(
-        questions[currentIndex].answer
-    );
+  </div>
 
-    if(user === correct){
-        document.getElementById("result").innerText="Correct!";
-    }else{
-        document.getElementById("result").innerText=
-            "Wrong! Correct answer: " +
-            questions[currentIndex].answer;
-    }
-}
+  <script src="../js/site.js" data-root="../" data-page="mixed"></script>
+  <script>
+    (function () {
+      var questions = [];
+      var order = [];
+      var step = 0;
+      var streak = 0;
 
-function nextQuestion(){
-    currentIndex++;
-    if(currentIndex >= questions.length){
-        currentIndex=0;
-    }
-    loadQuestion();
-}
-</script>
+      var qEl = document.getElementById("question");
+      var input = document.getElementById("userAnswer");
+      var result = document.getElementById("result");
+      var counter = document.getElementById("counter");
+      var streakEl = document.getElementById("streak");
+      var bar = document.getElementById("bar");
 
+      function normalize(text) {
+        return String(text)
+          .toLowerCase()
+          .replace(/[.,!?;:'"]/g, "")
+          .replace(/\s+/g, " ")
+          .trim();
+      }
+
+      function shuffle(list) {
+        var a = list.slice();
+        for (var i = a.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var t = a[i]; a[i] = a[j]; a[j] = t;
+        }
+        return a;
+      }
+
+      fetch("data/sentence_translation.json")
+        .then(function (res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
+        .then(function (data) {
+          questions = data.questions || [];
+          if (!questions.length) throw new Error("no questions");
+          order = shuffle(questions.map(function (_, i) { return i; }));
+          loadQuestion();
+        })
+        .catch(function (err) {
+          console.error(err);
+          counter.textContent = "Unavailable";
+          result.className = "tb-feedback-bad";
+          result.textContent = "Couldn't load the exercises. Please refresh the page.";
+        });
+
+      function current() { return questions[order[step]]; }
+
+      function clearResult() {
+        result.className = "";
+        result.textContent = "";
+      }
+
+      function loadQuestion() {
+        qEl.textContent = current().question;
+        input.value = "";
+        clearResult();
+        counter.textContent = "Sentence " + (step + 1) + " of " + order.length;
+        streakEl.textContent = "Streak " + streak;
+        bar.style.width = (step / order.length) * 100 + "%";
+        input.focus();
+      }
+
+      function checkAnswer() {
+        var user = normalize(input.value);
+        if (!user) {
+          result.className = "tb-feedback-bad";
+          result.textContent = "Please enter your translation.";
+          return;
+        }
+
+        if (user === normalize(current().answer)) {
+          streak++;
+          streakEl.textContent = "Streak " + streak;
+          result.className = "tb-feedback-ok";
+          result.textContent = "Correct: " + current().answer;
+          if (streak % 5 === 0) window.TB.confetti(70);
+        } else {
+          streak = 0;
+          streakEl.textContent = "Streak 0";
+          result.className = "tb-feedback-bad";
+          result.innerHTML =
+            "Not quite. Expected answer:<br><span class='mt-1 block font-extrabold'>" +
+            escapeHtml(current().answer) +
+            "</span>";
+        }
+      }
+
+      function hint() {
+        var words = String(current().answer).split(/\s+/);
+        var shown = words.slice(0, Math.max(1, Math.ceil(words.length / 3))).join(" ");
+        result.className = "tb-feedback-ok";
+        result.textContent = "Starts with: “" + shown + " …”";
+      }
+
+      function reveal() {
+        streak = 0;
+        streakEl.textContent = "Streak 0";
+        result.className = "tb-feedback-ok";
+        result.textContent = current().answer;
+      }
+
+      function nextQuestion() {
+        step++;
+        if (step >= order.length) {
+          step = 0;
+          order = shuffle(order);
+          window.TB.confetti(110);
+        }
+        loadQuestion();
+      }
+
+      function escapeHtml(s) {
+        return String(s).replace(/[&<>"']/g, function (c) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+        });
+      }
+
+      document.getElementById("checkBtn").addEventListener("click", checkAnswer);
+      document.getElementById("nextBtn").addEventListener("click", nextQuestion);
+      document.getElementById("hintBtn").addEventListener("click", hint);
+      document.getElementById("revealBtn").addEventListener("click", reveal);
+
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") checkAnswer();
+      });
+    })();
+  </script>
 </body>
+
 </html>
